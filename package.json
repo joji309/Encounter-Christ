@@ -1,0 +1,11 @@
+{
+  "name": "encounter-christ",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm --prefix frontend run build"
+  },
+  "dependencies": {
+    "next": "16.3.3"
+  }
+}

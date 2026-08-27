@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -88,19 +89,29 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database configuration (Neon Postgres or SQLite fallback)
+# Database configuration. Production must use hosted PostgreSQL because
+# Vercel's serverless filesystem is ephemeral.
 DATABASE_URL = os.environ.get('DATABASE_URL')
 if DATABASE_URL:
     DATABASES = {
-        'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=0,
+            ssl_require=not DEBUG,
+        )
     }
-else:
+elif DEBUG:
+    # Keep SQLite available for local development without a database service.
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+else:
+    raise ImproperlyConfigured(
+        'DATABASE_URL must be set when DEBUG=False. Configure a hosted PostgreSQL database.'
+    )
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
