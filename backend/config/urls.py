@@ -17,5 +17,5 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    # Keep admin/API ownership in Django; send all other public routes to Next.js.
+    # Keep admin/API ownership in Django; send other public routes to Next.js.
     urlpatterns += [re_path(r'^(?P<path>(?!admin(?:/|$)|api(?:/|$)|static(?:/|$)|media(?:/|$)).*)$', next_frontend_proxy)]
