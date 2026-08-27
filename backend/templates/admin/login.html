@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Sign In — Encounter Christ Admin</title>
+
+  {% load i18n static %}
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static 'vendor/fontawesome-free/css/all.min.css' %}">
+  <!-- AdminLTE & Bootstrap -->
+  <link rel="stylesheet" href="{% static 'vendor/adminlte/css/adminlte.min.css' %}">
+  <!-- Jazzmin base -->
+  <link rel="stylesheet" href="{% static 'jazzmin/css/main.css' %}">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="{% static 'core/img/logo.png' %}" type="image/png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── CSS Variables ─────────────────────────────────────── */
+    :root {
+      --gold:        #B45309;
+      --gold-light:  #D97706;
+      --gold-bright: #F59E0B;
+      --parchment:   #FFFDF5;
+      --parchment-2: #FEF3C7;
+      --parchment-3: #FDE68A;
+      --ink:         #1C1917;
+      --ink-soft:    #44403C;
+      --ink-muted:   #78716C;
+      --border:      rgba(180,83,9,0.22);
+      --shadow:      0 20px 60px -12px rgba(180,83,9,0.20), 0 8px 20px -8px rgba(0,0,0,0.06);
+    }
+
+    /* ─── Full-Page Layout ──────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--parchment);
+      color: var(--ink);
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-image:
+        radial-gradient(ellipse at 50% 0%,   rgba(245,158,11,0.14) 0%, transparent 65%),
+        radial-gradient(circle  at 100% 30%,  rgba(254,240,138,0.28) 0%, transparent 50%),
+        radial-gradient(circle  at 0%   70%,  rgba(251,191,36, 0.18) 0%, transparent 50%),
+        linear-gradient(to bottom, #fffef9 0%, #fefcf3 100%);
+      background-attachment: fixed;
+      padding: 1rem;
+    }
+
+    /* ─── Page wrapper ──────────────────────────────────────── */
+    .login-wrapper {
+      width: 100%;
+      max-width: 1100px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      background: rgba(255,253,245,0.92);
+      border: 1px solid var(--border);
+      border-radius: 2rem;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+      min-height: 560px;
+    }
+
+    /* ─── Left Panel (branding) ─────────────────────────────── */
+    .brand-panel {
+      background: linear-gradient(145deg, #78350F 0%, #92400E 40%, #B45309 80%, #D97706 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* decorative radial glow behind the monstrance */
+    .brand-panel::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245,158,11,0.35) 0%, transparent 70%);
+      animation: glow 4s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1);   }
+      50%       { opacity: 1;   transform: translate(-50%, -50%) scale(1.12); }
+    }
+
+    .brand-logo {
+      position: relative;
+      z-index: 2;
+      width: 140px;
+      height: 140px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 20px rgba(251,191,36,0.7)) drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+      animation: float 5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0);    }
+      50%       { transform: translateY(-8px); }
+    }
+
+    .brand-title {
+      position: relative;
+      z-index: 2;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      color: #FEF3C7;
+      text-align: center;
+      margin-top: 1.5rem;
+      letter-spacing: 0.12em;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .brand-subtitle {
+      position: relative;
+      z-index: 2;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(254,240,138,0.8);
+      text-align: center;
+      margin-top: 0.6rem;
+      font-weight: 600;
+    }
+
+    .brand-verse {
+      position: relative;
+      z-index: 2;
+      margin-top: 2.5rem;
+      padding: 1rem 1.25rem;
+      border: 1px solid rgba(254,240,138,0.35);
+      border-radius: 0.875rem;
+      background: rgba(0,0,0,0.18);
+      text-align: center;
+      max-width: 280px;
+    }
+
+    .brand-verse p {
+      font-style: italic;
+      font-size: 0.8rem;
+      color: rgba(254,240,138,0.92);
+      line-height: 1.7;
+    }
+
+    .brand-verse cite {
+      display: block;
+      margin-top: 0.4rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(253,230,138,0.75);
+      font-style: normal;
+    }
+
+    /* ─── Right Panel (login form) ──────────────────────────── */
+    .form-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem 2.5rem;
+      background: var(--parchment);
+    }
+
+    .form-heading {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.3rem, 2.5vw, 1.75rem);
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.4rem;
+    }
+
+    .form-subheading {
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+      margin-bottom: 2rem;
+    }
+
+    /* Error messages */
+    .errornote, .errorlist {
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
+      border-radius: 0.75rem;
+      color: #991B1B;
+      padding: 0.75rem 1rem;
+      font-size: 0.82rem;
+      margin-bottom: 1.25rem;
+      list-style: none;
+    }
+
+    /* Input groups */
+    .field-group {
+      margin-bottom: 1.1rem;
+    }
+
+    .field-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 0.4rem;
+    }
+
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrap i {
+      position: absolute;
+      right: 0.9rem;
+      color: var(--gold-light);
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      padding: 0.75rem 2.5rem 0.75rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 0.75rem;
+      background: rgba(255,253,245,0.95);
+      font-size: 0.9rem;
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    .input-wrap input:focus {
+      border-color: var(--gold-light);
+      box-shadow: 0 0 0 3px rgba(217,119,6,0.15);
+    }
+
+    .input-wrap input::placeholder {
+      color: var(--ink-muted);
+    }
+
+    /* Submit button */
+    .btn-signin {
+      width: 100%;
+      padding: 0.85rem;
+      margin-top: 0.5rem;
+      border: none;
+      border-radius: 0.875rem;
+      background: linear-gradient(135deg, #F59E0B 0%, #D97706 50%, #B45309 100%);
+      color: #ffffff;
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(217,119,6,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-signin:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(217,119,6,0.55);
+    }
+
+    .btn-signin:active {
+      transform: translateY(0);
+    }
+
+    /* Footer note */
+    .form-footer {
+      margin-top: 2rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(180,83,9,0.15);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .form-footer img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      opacity: 0.7;
+    }
+
+    .form-footer p {
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+      font-style: italic;
+    }
+
+    .copyright {
+      margin-top: 1.5rem;
+      font-size: 0.65rem;
+      color: var(--ink-muted);
+      letter-spacing: 0.05em;
+      text-align: center;
+    }
+
+    /* ─── Responsive Breakpoints ────────────────────────────── */
+    /* Tablet: stack the two columns */
+    @media (max-width: 768px) {
+      body { align-items: flex-start; padding: 0; }
+
+      .login-wrapper {
+        grid-template-columns: 1fr;
+        border-radius: 0;
+        min-height: 100vh;
+        box-shadow: none;
+        border: none;
+      }
+
+      .brand-panel {
+        padding: 2.5rem 1.5rem 2rem;
+        min-height: auto;
+      }
+
+      .brand-logo { width: 100px; height: 100px; }
+      .brand-verse { display: none; }  /* hide verse on mobile to save space */
+
+      .form-panel {
+        padding: 2rem 1.5rem 2.5rem;
+        flex: 1;
+      }
+    }
+
+    /* Small mobile */
+    @media (max-width: 420px) {
+      .brand-title { font-size: 1.25rem; }
+      .brand-subtitle { font-size: 0.65rem; }
+      .form-heading { font-size: 1.2rem; }
+      .brand-logo { width: 80px; height: 80px; }
+      .brand-panel { padding: 2rem 1rem 1.5rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login-wrapper">
+
+    <!-- ══ Left: Brand Panel ══════════════════════════════════════ -->
+    <div class="brand-panel">
+      <img class="brand-logo" src="{% static 'core/img/logo.png' %}" alt="Encounter Christ Monstrance">
+
+      <h1 class="brand-title">ENCOUNTER<br>CHRIST</h1>
+      <p class="brand-subtitle">Eucharistic Miracles &amp; Catholic Faith</p>
+
+      <div class="brand-verse">
+        <p>&ldquo;This is my body, which is given for you. Do this in remembrance of me.&rdquo;</p>
+        <cite>— Luke 22:19</cite>
+      </div>
+    </div>
+
+    <!-- ══ Right: Login Form ══════════════════════════════════════ -->
+    <div class="form-panel">
+      <h2 class="form-heading">Admin Sign In</h2>
+      <p class="form-subheading">Manage Eucharistic Miracles, Prayers &amp; Catholic Content</p>
+
+      {% if form.errors %}
+        <ul class="errorlist">
+          <li><i class="fas fa-exclamation-circle" style="margin-right:6px;"></i>
+            {% trans "Please enter a correct username and password." %}
+          </li>
+        </ul>
+      {% endif %}
+
+      {% if request.GET.next %}
+        <p style="font-size:0.78rem; color:#78716C; margin-bottom:1rem;">
+          <i class="fas fa-lock" style="margin-right:5px; color:#B45309;"></i>
+          {% trans "Please log in to access this page." %}
+        </p>
+      {% endif %}
+
+      <form method="post" action="{% url 'admin:login' %}{% if next %}?next={{ next }}{% endif %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}">
+
+        <div class="field-group">
+          <label for="id_username">{% trans "Username" %}</label>
+          <div class="input-wrap">
+            <input
+              type="text"
+              id="id_username"
+              name="username"
+              autocomplete="username"
+              autofocus
+              required
+              placeholder="Enter your username"
+            >
+            <i class="fas fa-user"></i>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="id_password">{% trans "Password" %}</label>
+          <div class="input-wrap">
+            <input
+              type="password"
+              id="id_password"
+              name="password"
+              autocomplete="current-password"
+              required
+              placeholder="Enter your password"
+            >
+            <i class="fas fa-lock"></i>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-signin">
+          <i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>
+          {% trans "Sign In" %}
+        </button>
+      </form>
+
+      <div class="form-footer">
+        <img src="{% static 'core/img/logo.png' %}" alt="Monstrance">
+        <p>Ad Majorem Dei Gloriam &mdash; For the Greater Glory of God</p>
+      </div>
+
+      <p class="copyright">&copy; Encounter Christ Apostolate. All rights reserved.</p>
+    </div>
+
+  </div>
+
+  <!-- jQuery -->
+  <script src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+  <!-- Bootstrap -->
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <!-- AdminLTE -->
+  <script src="{% static 'vendor/adminlte/js/adminlte.min.js' %}"></script>
+</body>
+</html>

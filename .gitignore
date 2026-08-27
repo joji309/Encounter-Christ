@@ -1,0 +1,32 @@
+# Python / Django
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+backend/venv/
+backend/.env
+backend/db.sqlite3
+backend/media/
+backend/staticfiles/
+backend/*.log
+
+# Node / Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.vercel/
+frontend/.git-frontend-backup/
+frontend/*.log
+frontend/npm-debug.log*
+frontend/*.tsbuildinfo
+
+# Local environment and editor files
+.env
+.env.*
+!.env.example
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Keep uploaded/public media assets tracked intentionally.

@@ -1,0 +1,138 @@
+/* Encounter Christ admin palette: parchment, amber and the login page's warm brown. */
+:root {
+  --ec-parchment: #fffdf5;
+  --ec-parchment-soft: #fef3c7;
+  --ec-ink: #1c1917;
+  --ec-muted: #57534e;
+  --ec-gold: #b45309;
+  --ec-gold-light: #d97706;
+  --ec-border: rgba(180, 83, 9, 0.2);
+}
+
+html[data-bs-theme="light"] body,
+body.bg-body-tertiary {
+  color: var(--ec-ink);
+  background-color: var(--ec-parchment) !important;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(245, 158, 11, 0.14), transparent 65%),
+    radial-gradient(circle at 100% 30%, rgba(254, 240, 138, 0.25), transparent 50%),
+    linear-gradient(to bottom, #fffef9 0%, #fefcf3 100%);
+  background-attachment: fixed;
+}
+
+.app-header.navbar {
+  background: rgba(255, 253, 245, 0.96) !important;
+  border-bottom: 1px solid var(--ec-border) !important;
+  box-shadow: 0 2px 14px rgba(180, 83, 9, 0.08);
+}
+
+.app-header .nav-link,
+.app-header .navbar-nav .nav-link,
+.app-header .navbar-nav .nav-link i {
+  color: var(--ec-muted) !important;
+}
+
+.app-header .nav-link:hover,
+.app-header .nav-link:focus {
+  color: var(--ec-gold) !important;
+  background-color: var(--ec-parchment-soft);
+}
+
+.app-sidebar {
+  color: #fff7ed !important;
+  background: linear-gradient(180deg, #78350f 0%, #92400e 46%, #b45309 100%) !important;
+  box-shadow: 3px 0 20px rgba(120, 53, 15, 0.16);
+}
+
+.app-sidebar .brand-link {
+  color: #fef3c7 !important;
+  background: rgba(0, 0, 0, 0.12) !important;
+  border-bottom: 1px solid rgba(254, 240, 138, 0.25) !important;
+}
+
+.app-sidebar .nav-header,
+.app-sidebar .nav-link,
+.app-sidebar .nav-link p,
+.app-sidebar .nav-link i {
+  color: rgba(255, 247, 237, 0.9) !important;
+}
+
+.app-sidebar .nav-link:hover,
+.app-sidebar .nav-link:focus,
+.app-sidebar .nav-link.active {
+  color: #fff !important;
+  background-color: rgba(254, 240, 138, 0.2) !important;
+}
+
+.app-sidebar .nav-link.active {
+  border-left: 3px solid #fcd34d;
+}
+
+.app-main {
+  background: transparent !important;
+}
+
+.app-content,
+.content-wrapper {
+  background: transparent !important;
+}
+
+.content-header h1,
+.content-header .breadcrumb-item,
+.content-header .breadcrumb-item a,
+.card-title,
+.card-header,
+.card-body,
+.table {
+  color: var(--ec-ink);
+}
+
+.card,
+.info-box,
+.small-box,
+.callout {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid var(--ec-border) !important;
+  box-shadow: 0 10px 28px -12px rgba(180, 83, 9, 0.2) !important;
+}
+
+.card-header {
+  background: linear-gradient(180deg, #fffdf5 0%, #fef3c7 100%) !important;
+  border-bottom: 1px solid var(--ec-border) !important;
+}
+
+.card a:not(.btn),
+.content-wrapper a:not(.btn) {
+  color: var(--ec-gold) !important;
+}
+
+.card a:not(.btn):hover,
+.content-wrapper a:not(.btn):hover {
+  color: var(--ec-gold-light) !important;
+}
+
+.btn-primary,
+.btn-warning,
+.bg-primary,
+.bg-warning {
+  color: #fff !important;
+  background-color: var(--ec-gold-light) !important;
+  border-color: var(--ec-gold) !important;
+}
+
+.table thead th {
+  background-color: var(--ec-parchment-soft);
+  border-bottom-color: var(--ec-border);
+}
+
+.main-footer {
+  color: var(--ec-muted) !important;
+  background: rgba(255, 253, 245, 0.88) !important;
+  border-top: 1px solid var(--ec-border) !important;
+}
+
+@media (max-width: 991.98px) {
+  .app-sidebar {
+    box-shadow: 8px 0 28px rgba(120, 53, 15, 0.25);
+  }
+}
