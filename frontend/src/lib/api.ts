@@ -6,8 +6,15 @@ const serverApiUrl = process.env.DJANGO_BACKEND_URL
   ? `${process.env.DJANGO_BACKEND_URL.replace(/\/$/, '')}/api`
   : browserApiUrl.startsWith('http')
     ? browserApiUrl
-    : 'http://127.0.0.1:8000/api';
+    : null;
 const API_BASE_URL = typeof window === 'undefined' ? serverApiUrl : browserApiUrl;
+
+function getApiBaseUrl(): string {
+  if (!API_BASE_URL) {
+    throw new Error('Django backend URL is not configured');
+  }
+  return API_BASE_URL;
+}
 
 export async function fetchMiracles(params?: { category?: string; century?: string; search?: string; featured?: boolean }): Promise<Miracle[]> {
   try {
@@ -17,7 +24,7 @@ export async function fetchMiracles(params?: { category?: string; century?: stri
     if (params?.search) searchParams.set('search', params.search);
     if (params?.featured) searchParams.set('featured', 'true');
 
-    const res = await fetch(`${API_BASE_URL}/miracles/?${searchParams.toString()}`, {
+    const res = await fetch(`${getApiBaseUrl()}/miracles/?${searchParams.toString()}`, {
       next: { revalidate: 60 },
     });
     if (!res.ok) throw new Error('API fetch failed');
@@ -47,7 +54,7 @@ export async function fetchMiracles(params?: { category?: string; century?: stri
 
 export async function fetchMiracleBySlug(slug: string): Promise<Miracle | null> {
   try {
-    const res = await fetch(`${API_BASE_URL}/miracles/${slug}/`, {
+    const res = await fetch(`${getApiBaseUrl()}/miracles/${slug}/`, {
       next: { revalidate: 60 },
     });
     if (!res.ok) throw new Error('API fetch failed');
@@ -60,7 +67,7 @@ export async function fetchMiracleBySlug(slug: string): Promise<Miracle | null> 
 
 export async function fetchPrayerIntentions(): Promise<PrayerIntention[]> {
   try {
-    const res = await fetch(`${API_BASE_URL}/prayers/`, { cache: 'no-store' });
+    const res = await fetch(`${getApiBaseUrl()}/prayers/`, { cache: 'no-store' });
     if (!res.ok) throw new Error('API fetch failed');
     const data = await res.json();
     return Array.isArray(data) ? data : data.results || INITIAL_PRAYERS;
@@ -71,7 +78,7 @@ export async function fetchPrayerIntentions(): Promise<PrayerIntention[]> {
 
 export async function submitPrayerIntention(payload: { name: string; location?: string; category: string; intention_text: string }): Promise<{ success: boolean; data?: PrayerIntention }> {
   try {
-    const res = await fetch(`${API_BASE_URL}/prayers/`, {
+    const res = await fetch(`${getApiBaseUrl()}/prayers/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -98,7 +105,7 @@ export async function submitPrayerIntention(payload: { name: string; location?: 
 
 export async function prayForIntention(id: number): Promise<{ success: boolean; newCount?: number }> {
   try {
-    const res = await fetch(`${API_BASE_URL}/prayers/${id}/pray/`, {
+    const res = await fetch(`${getApiBaseUrl()}/prayers/${id}/pray/`, {
       method: 'POST',
     });
     if (!res.ok) throw new Error('Pray action failed');
@@ -111,7 +118,7 @@ export async function prayForIntention(id: number): Promise<{ success: boolean; 
 
 export async function fetchDailyReflection(): Promise<DailyReflection> {
   try {
-    const res = await fetch(`${API_BASE_URL}/reflections/today/`, { next: { revalidate: 3600 } });
+    const res = await fetch(`${getApiBaseUrl()}/reflections/today/`, { next: { revalidate: 3600 } });
     if (!res.ok) throw new Error('Reflection fetch failed');
     return await res.json();
   } catch {
@@ -121,7 +128,7 @@ export async function fetchDailyReflection(): Promise<DailyReflection> {
 
 export async function fetchEvents(): Promise<Event[]> {
   try {
-    const res = await fetch(`${API_BASE_URL}/events/`, { next: { revalidate: 60 } });
+    const res = await fetch(`${getApiBaseUrl()}/events/`, { next: { revalidate: 60 } });
     if (!res.ok) throw new Error('Events fetch failed');
     const data = await res.json();
     return Array.isArray(data) ? data : data.results || [];
