@@ -1,9 +1,13 @@
 import { Miracle, PrayerIntention, DailyReflection, ApologeticsTopic, Event, INITIAL_MIRACLES, INITIAL_PRAYERS, INITIAL_DAILY_REFLECTION } from '@/data/miraclesData';
 
-// Always configure the deployed backend explicitly with NEXT_PUBLIC_API_URL.
-// The localhost fallback prevents a missing production variable from making
-// Next.js server rendering call its own deployment indefinitely during builds.
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api';
+// Browser requests stay same-origin; server rendering calls Django directly.
+const browserApiUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
+const serverApiUrl = process.env.DJANGO_BACKEND_URL
+  ? `${process.env.DJANGO_BACKEND_URL.replace(/\/$/, '')}/api`
+  : browserApiUrl.startsWith('http')
+    ? browserApiUrl
+    : 'http://127.0.0.1:8000/api';
+const API_BASE_URL = typeof window === 'undefined' ? serverApiUrl : browserApiUrl;
 
 export async function fetchMiracles(params?: { category?: string; century?: string; search?: string; featured?: boolean }): Promise<Miracle[]> {
   try {
