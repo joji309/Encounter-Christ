@@ -25,7 +25,7 @@ export async function fetchMiracles(params?: { category?: string; century?: stri
     if (params?.featured) searchParams.set('featured', 'true');
 
     const res = await fetch(`${getApiBaseUrl()}/miracles/?${searchParams.toString()}`, {
-      next: { revalidate: 60 },
+      cache: 'no-store',
     });
     if (!res.ok) throw new Error('API fetch failed');
     const data = await res.json();
@@ -55,7 +55,7 @@ export async function fetchMiracles(params?: { category?: string; century?: stri
 export async function fetchMiracleBySlug(slug: string): Promise<Miracle | null> {
   try {
     const res = await fetch(`${getApiBaseUrl()}/miracles/${slug}/`, {
-      next: { revalidate: 60 },
+      cache: 'no-store',
     });
     if (!res.ok) throw new Error('API fetch failed');
     return await res.json();
@@ -118,7 +118,7 @@ export async function prayForIntention(id: number): Promise<{ success: boolean; 
 
 export async function fetchDailyReflection(): Promise<DailyReflection> {
   try {
-    const res = await fetch(`${getApiBaseUrl()}/reflections/today/`, { next: { revalidate: 3600 } });
+    const res = await fetch(`${getApiBaseUrl()}/reflections/today/`, { cache: 'no-store' });
     if (!res.ok) throw new Error('Reflection fetch failed');
     return await res.json();
   } catch {
@@ -128,7 +128,7 @@ export async function fetchDailyReflection(): Promise<DailyReflection> {
 
 export async function fetchEvents(): Promise<Event[]> {
   try {
-    const res = await fetch(`${getApiBaseUrl()}/events/`, { next: { revalidate: 60 } });
+    const res = await fetch(`${getApiBaseUrl()}/events/`, { cache: 'no-store' });
     if (!res.ok) throw new Error('Events fetch failed');
     const data = await res.json();
     return Array.isArray(data) ? data : data.results || [];
