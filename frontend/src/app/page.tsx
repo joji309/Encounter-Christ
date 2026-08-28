@@ -29,6 +29,8 @@ export const metadata = {
   description: 'Encounter Jesus Christ through the scientific and historical realities of Eucharistic Miracles. Return home to the Sacraments, pray in the Adoration room, and grow in faith.',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   const [allMiracles, featuredMiracles, dailyReflection, initialPrayers, events] = await Promise.all([
     fetchMiracles(),

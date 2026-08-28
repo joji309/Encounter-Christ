@@ -2,11 +2,14 @@ import { Miracle, PrayerIntention, DailyReflection, ApologeticsTopic, Event, INI
 
 // Browser requests stay same-origin; server rendering calls Django directly.
 const browserApiUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
+const vercelOrigin = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
 const serverApiUrl = process.env.DJANGO_BACKEND_URL
   ? `${process.env.DJANGO_BACKEND_URL.replace(/\/$/, '')}/api`
   : browserApiUrl.startsWith('http')
     ? browserApiUrl
-    : null;
+    : vercelOrigin
+      ? `https://${vercelOrigin}/api`
+      : null;
 const API_BASE_URL = typeof window === 'undefined' ? serverApiUrl : browserApiUrl;
 
 function getApiBaseUrl(): string {

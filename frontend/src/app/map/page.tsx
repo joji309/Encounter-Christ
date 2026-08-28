@@ -1,6 +1,8 @@
 import React from 'react';
 import MiracleMapClientWrapper from '@/components/MiracleMapClientWrapper';
 import { fetchMiracles } from '@/lib/api';
+
+export const dynamic = 'force-dynamic';
 import { Globe } from 'lucide-react';
 
 export const metadata = {
