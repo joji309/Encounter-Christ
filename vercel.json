@@ -1,7 +1,7 @@
 {
   "version": 2,
   "installCommand": "npm install --no-package-lock && npm --prefix frontend ci",
-  "buildCommand": "python -m pip install -r requirements.txt && python backend/manage.py collectstatic --noinput && npm --prefix frontend run build",
+  "buildCommand": "python -m pip install --break-system-packages -r requirements.txt && python backend/manage.py collectstatic --noinput && npm --prefix frontend run build",
   "outputDirectory": "frontend/.next",
   "framework": "nextjs",
   "rewrites": [
