@@ -13,10 +13,14 @@ from config.wsgi import application
 
 def app(environ, start_response):
     query = parse_qsl(environ.get('QUERY_STRING', ''), keep_blank_values=True)
+    path_value = next((value for key, value in query if key == 'path'), '')
     environ['QUERY_STRING'] = urlencode(
         [(key, value) for key, value in query if key != 'path']
     )
     path = environ.get('PATH_INFO', '')
+    if path in {'/admin', '/admin/'} and path_value:
+        environ['PATH_INFO'] = f'/admin/{path_value.strip("/")}/'
+        path = environ['PATH_INFO']
     if path == '/admin' or path.startswith('/admin/') or path == '/api' or path.startswith('/api/'):
         if not path.endswith('/'):
             environ['PATH_INFO'] = f'{path}/'
