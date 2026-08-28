@@ -8,7 +8,7 @@ class AdminPathMiddleware:
 
     def __call__(self, request):
         path = request.path_info
-        if path.startswith('/admin/') and path not in self.exact_paths and not path.endswith('/'):
+        if (path.startswith('/admin/') or path.startswith('/api/')) and not path.endswith('/'):
             normalized_path = f'{path}/'
             request.path_info = normalized_path
             request.META['PATH_INFO'] = normalized_path
