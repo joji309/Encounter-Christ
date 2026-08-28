@@ -1,25 +1,38 @@
 {
   "version": 2,
-  "installCommand": "npm install --no-package-lock && npm --prefix frontend ci",
-  "buildCommand": "python -m pip install --break-system-packages -r requirements.txt && python backend/manage.py collectstatic --noinput && npm --prefix frontend run build",
-  "outputDirectory": "frontend/.next",
-  "framework": "nextjs",
-  "rewrites": [
+  "builds": [
     {
-      "source": "/api/:path*",
-      "destination": "/api/index.py"
+      "src": "api/index.py",
+      "use": "@vercel/python"
     },
     {
-      "source": "/admin/:path*",
-      "destination": "/api/index.py"
+      "src": "frontend/package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api(?:/(.*))?",
+      "dest": "/api/index.py"
     },
     {
-      "source": "/static/:path*",
-      "destination": "/api/index.py"
+      "src": "/admin(?:/(.*))?",
+      "dest": "/api/index.py"
     },
     {
-      "source": "/media/:path*",
-      "destination": "/api/index.py"
+      "src": "/static(?:/(.*))?",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/media(?:/(.*))?",
+      "dest": "/api/index.py"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/$1"
     }
   ]
 }
