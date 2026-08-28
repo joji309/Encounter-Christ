@@ -16,7 +16,7 @@ load_dotenv(BASE_DIR / '.env')
 # Quick-start development settings - unsuitable for production
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-encounter-christ-faith-platform-key-2026')
 
-DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
