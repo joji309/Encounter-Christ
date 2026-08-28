@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "python -m pip install --break-system-packages -r requirements.txt && python backend/manage.py collectstatic --noinput --upload-unhashed-files && npm --prefix frontend run build",
+  "buildCommand": "python -m pip install --break-system-packages -r requirements.txt && python backend/manage.py collectstatic --noinput --upload-unhashed-files && mkdir -p frontend/public/static && cp -R backend/staticfiles/. frontend/public/static/ && npm --prefix frontend run build",
   "builds": [
     {
       "src": "api/index.py",
@@ -24,10 +24,6 @@
     },
     {
       "src": "/admin(?:/(.*))?",
-      "dest": "/api/index.py"
-    },
-    {
-      "src": "/static(?:/(.*))?",
       "dest": "/api/index.py"
     },
     {
