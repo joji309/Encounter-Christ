@@ -10,4 +10,9 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
 from config.wsgi import application
 
-app = application
+def app(environ, start_response):
+    path = environ.get('PATH_INFO', '')
+    if path == '/admin' or path.startswith('/admin/') or path == '/api' or path.startswith('/api/'):
+        if not path.endswith('/'):
+            environ['PATH_INFO'] = f'{path}/'
+    return application(environ, start_response)

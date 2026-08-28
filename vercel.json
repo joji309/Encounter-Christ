@@ -4,7 +4,6 @@
   "buildCommand": "python -m pip install --break-system-packages -r requirements.txt && python backend/manage.py collectstatic --noinput && npm --prefix frontend run build",
   "outputDirectory": "frontend/.next",
   "framework": "nextjs",
-  "trailingSlash": true,
   "rewrites": [
     {
       "source": "/api/:path*",
