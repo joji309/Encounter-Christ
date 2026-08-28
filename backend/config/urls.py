@@ -8,10 +8,11 @@ from django.conf.urls.static import static
 from .frontend_proxy import next_frontend_proxy
 
 # Admin branding is configured via JAZZMIN_SETTINGS in settings.py
+admin_index = admin.site.admin_view(admin.site.index)
 
 urlpatterns = [
     path('admin/login', admin.site.login),
-    path('admin', admin.site.index),
+    path('admin', admin_index),
     path('admin/', admin.site.urls),
     path('api/', include('core.urls')),
 ]
