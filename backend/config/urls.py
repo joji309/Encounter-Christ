@@ -12,6 +12,7 @@ admin_index = admin.site.admin_view(admin.site.index)
 
 urlpatterns = [
     path('admin/login', admin.site.login),
+    path('admin/logout', admin.site.logout),
     path('admin', admin_index),
     path('admin/', admin.site.urls),
     path('api/', include('core.urls')),
