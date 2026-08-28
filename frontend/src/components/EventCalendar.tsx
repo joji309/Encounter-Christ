@@ -34,7 +34,7 @@ export default function EventCalendar({ events, initialMonth }: { events: Event[
     setMonth(`${next.getFullYear()}-${pad(next.getMonth() + 1)}-01`);
   };
 
-  const formatEventTime = (date: string) => new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' }).format(new Date(date));
+  const formatEventTime = (date: string) => new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'UTC' }).format(new Date(date));
 
   return (
     <section className="sacred-glass-card rounded-3xl border border-amber-300/70 p-5 sm:p-8 shadow-xl" aria-labelledby="events-heading">
@@ -62,7 +62,8 @@ export default function EventCalendar({ events, initialMonth }: { events: Event[
             {Array.from({ length: firstDay }, (_, index) => <span key={`blank-${index}`} />)}
             {Array.from({ length: daysInMonth }, (_, index) => {
               const day = index + 1;
-              const isToday = new Date().toDateString() === new Date(year, monthIndex, day).toDateString();
+              const now = new Date();
+              const isToday = now.getUTCFullYear() === year && now.getUTCMonth() === monthIndex && now.getUTCDate() === day;
               return <span key={day} className={`relative flex aspect-square items-center justify-center rounded-full text-sm ${isToday ? 'bg-amber-600 font-bold text-white shadow-md' : eventDays.has(day) ? 'font-bold text-amber-800' : 'text-stone-700'}`}><span>{day}</span>{eventDays.has(day) && !isToday && <i className="absolute bottom-1 h-1 w-1 rounded-full bg-amber-500" />}</span>;
             })}
           </div>
@@ -74,7 +75,7 @@ export default function EventCalendar({ events, initialMonth }: { events: Event[
           <div className="space-y-3">
             {upcoming.map(event => <article key={event.id} className="rounded-xl border border-amber-100 bg-amber-50/30 p-4">
               <div className="flex gap-3">
-                <div className="min-w-[3rem] text-center font-serif font-bold leading-tight text-amber-800"><div className="text-xl">{new Date(event.event_date).getDate()}</div><div className="text-[10px] uppercase">{new Intl.DateTimeFormat('en-US', { month: 'short' }).format(new Date(event.event_date))}</div></div>
+                <div className="min-w-[3rem] text-center font-serif font-bold leading-tight text-amber-800"><div className="text-xl">{new Date(event.event_date).getUTCDate()}</div><div className="text-[10px] uppercase">{new Intl.DateTimeFormat('en-US', { month: 'short', timeZone: 'UTC' }).format(new Date(event.event_date))}</div></div>
                 <div className="min-w-0 flex-1"><span className={`inline-block rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${categoryStyles[event.category] || categoryStyles.OTHER}`}>{event.category_display || event.category}</span><h4 className="mt-1 font-serif text-sm font-bold text-stone-900 sm:text-base">{event.title}</h4><div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-stone-500"><span className="inline-flex items-center gap-1"><Clock3 className="h-3 w-3" /> {formatEventTime(event.event_date)}</span>{event.location && <span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3" /> {event.location}</span>}</div></div>
               </div>
             </article>)}
