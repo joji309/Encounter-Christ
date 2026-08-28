@@ -11,7 +11,7 @@ from .frontend_proxy import next_frontend_proxy
 
 urlpatterns = [
     path('admin/login', admin.site.login),
-    path('admin', admin.site.login),
+    path('admin', admin.site.index),
     path('admin/', admin.site.urls),
     path('api/', include('core.urls')),
 ]
