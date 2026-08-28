@@ -10,6 +10,7 @@ from .frontend_proxy import next_frontend_proxy
 # Admin branding is configured via JAZZMIN_SETTINGS in settings.py
 
 urlpatterns = [
+    path('admin/login', admin.site.login),
     path('admin/', admin.site.urls),
     path('api/', include('core.urls')),
 ]

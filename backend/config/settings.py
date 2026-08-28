@@ -17,6 +17,7 @@ load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-encounter-christ-faith-platform-key-2026')
 
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+APPEND_SLASH = False
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
