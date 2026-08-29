@@ -70,12 +70,13 @@ export default async function RootLayout({
   if (siteStatus.maintenance_mode) {
     return (
       <html lang="en" className={`${cinzel.variable} ${inter.variable}`}>
-        <body className="min-h-screen bg-stone-950 text-amber-50">
+        <body className="min-h-screen bg-stone-100 text-stone-900">
           <main className="flex min-h-screen items-center justify-center px-6 text-center">
             <div className="max-w-xl space-y-6">
-              <p className="text-xs font-mono uppercase tracking-[0.3em] text-amber-400">Encounter Christ</p>
-              <h1 className="font-serif text-4xl font-bold sm:text-6xl">We&apos;ll be right back</h1>
-              <p className="text-sm leading-relaxed text-stone-300">{siteStatus.maintenance_message}</p>
+              <img src="/logo.png" alt="Encounter Christ" className="mx-auto h-auto w-32 object-contain sm:w-40" />
+              <p className="text-xs font-mono uppercase tracking-[0.3em] text-amber-600">Encounter Christ</p>
+              <h1 className="font-serif text-4xl font-bold text-stone-900 sm:text-6xl">We&apos;ll be right back</h1>
+              <p className="text-base font-medium leading-relaxed text-stone-800">{siteStatus.maintenance_message}</p>
             </div>
           </main>
         </body>
