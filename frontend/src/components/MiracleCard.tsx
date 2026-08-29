@@ -14,7 +14,7 @@ export default function MiracleCard({ miracle }: MiracleCardProps) {
       {/* Cover Image Container */}
       <div className="relative h-56 w-full overflow-hidden bg-amber-100">
         <Image
-          src={miracle.cover_image_url}
+          src={miracle.cover_image_url || '/logo.png'}
           alt={miracle.title}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

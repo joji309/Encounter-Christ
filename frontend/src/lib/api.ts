@@ -1,4 +1,5 @@
 import { Miracle, PrayerIntention, DailyReflection, ApologeticsTopic, Event, INITIAL_MIRACLES, INITIAL_PRAYERS, INITIAL_DAILY_REFLECTION } from '@/data/miraclesData';
+import { SITE_URL } from './site-url';
 
 // Browser requests stay same-origin; server rendering calls Django directly.
 const browserApiUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
@@ -7,9 +8,11 @@ const serverApiUrl = process.env.DJANGO_BACKEND_URL
   ? `${process.env.DJANGO_BACKEND_URL.replace(/\/$/, '')}/api`
   : browserApiUrl.startsWith('http')
     ? browserApiUrl
-    : vercelOrigin
-      ? `https://${vercelOrigin}/api`
-      : null;
+    : SITE_URL
+      ? `${SITE_URL}/api`
+      : vercelOrigin
+        ? `https://${vercelOrigin}/api`
+        : null;
 const API_BASE_URL = typeof window === 'undefined' ? serverApiUrl : browserApiUrl;
 
 function getApiBaseUrl(): string {
