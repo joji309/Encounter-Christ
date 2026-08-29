@@ -9,7 +9,17 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'slug', 'description', 'icon', 'miracles_count']
 
 
-class MiracleListSerializer(serializers.ModelSerializer):
+class MiracleImageUrlMixin:
+    """Prefer the image uploaded through Django admin over a manual URL."""
+
+    cover_image_url = serializers.SerializerMethodField()
+
+    def get_cover_image_url(self, obj):
+        if obj.cover_image:
+            return obj.cover_image.url
+        return obj.cover_image_url
+
+class MiracleListSerializer(MiracleImageUrlMixin, serializers.ModelSerializer):
     category_name = serializers.CharField(source='category.name', read_only=True)
 
     class Meta:
@@ -23,7 +33,7 @@ class MiracleListSerializer(serializers.ModelSerializer):
         ]
 
 
-class MiracleDetailSerializer(serializers.ModelSerializer):
+class MiracleDetailSerializer(MiracleImageUrlMixin, serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
 
     class Meta:

@@ -319,7 +319,7 @@ export default function MiracleMap({ miracles }: MiracleMapProps) {
               {/* Cover Image */}
               <div className="relative h-44 w-full rounded-2xl overflow-hidden bg-amber-100 shadow-md">
                 <Image
-                  src={selectedMiracle.cover_image_url || '/placeholder-miracle.jpg'}
+                  src={selectedMiracle.cover_image_url || '/logo.png'}
                   alt={selectedMiracle.title}
                   fill
                   sizes="(max-width: 768px) 100vw, 400px"
