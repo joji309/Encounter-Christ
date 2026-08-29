@@ -5,7 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event
+from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings
 from .serializers import (
     CategorySerializer,
     MiracleListSerializer,
