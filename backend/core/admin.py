@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.utils.html import format_html
-from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event
+from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings
 
 
 class MiracleAdminForm(forms.ModelForm):
@@ -180,3 +180,16 @@ class ApologeticsTopicAdmin(admin.ModelAdmin):
     search_fields = ['question', 'short_answer', 'detailed_explanation']
     prepopulated_fields = {'slug': ('question',)}
     ordering = ['category', 'order']
+
+
+@admin.register(SiteSettings)
+class SiteSettingsAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('Maintenance mode', {
+            'description': 'Turn this on to replace public frontend pages with a maintenance screen. The admin panel and API remain available.',
+            'fields': ('maintenance_mode', 'maintenance_message'),
+        }),
+    )
+
+    def has_add_permission(self, request):
+        return not SiteSettings.objects.exists()

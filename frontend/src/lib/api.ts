@@ -19,8 +19,19 @@ function getApiBaseUrl(): string {
   if (!API_BASE_URL) {
     throw new Error('Django backend URL is not configured');
   }
+
   return API_BASE_URL;
 }
+export async function fetchSiteStatus(): Promise<{ maintenance_mode: boolean; maintenance_message: string }> {
+  try {
+    const res = await fetch(`${getApiBaseUrl()}/site-status/`, { cache: 'no-store' });
+    if (!res.ok) throw new Error('Site status fetch failed');
+    return await res.json();
+  } catch {
+    return { maintenance_mode: false, maintenance_message: '' };
+  }
+}
+
 
 export async function fetchMiracles(params?: { category?: string; century?: string; search?: string; featured?: boolean }): Promise<Miracle[]> {
   try {

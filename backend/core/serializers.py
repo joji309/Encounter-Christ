@@ -1,5 +1,11 @@
 from rest_framework import serializers
-from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event
+from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings
+
+class SiteSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SiteSettings
+        fields = ('maintenance_mode', 'maintenance_message')
+
 
 class CategorySerializer(serializers.ModelSerializer):
     miracles_count = serializers.IntegerField(source='miracles.count', read_only=True)

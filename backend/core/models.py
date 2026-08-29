@@ -193,3 +193,15 @@ class ApologeticsTopic(models.Model):
 
     def __str__(self):
         return self.question
+class SiteSettings(models.Model):
+    maintenance_mode = models.BooleanField(default=False)
+    maintenance_message = models.CharField(max_length=255, default='We are preparing something beautiful. Please check back soon.')
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Site settings'
+        verbose_name_plural = 'Site settings'
+
+    def __str__(self):
+        return 'Site settings'
+

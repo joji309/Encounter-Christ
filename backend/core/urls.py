@@ -2,6 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
     CategoryViewSet,
+    SiteStatusView,
     MiracleViewSet,
     PrayerIntentionViewSet,
     TestimonyViewSet,
@@ -21,6 +22,7 @@ router.register(r'apologetics', ApologeticsTopicViewSet, basename='apologetic')
 router.register(r'events', EventViewSet, basename='event')
 
 urlpatterns = [
+    path('site-status/', SiteStatusView.as_view(), name='site-status'),
     path('', include(router.urls)),
     path('stats/', OverviewStatsView.as_view(), name='overview-stats'),
 ]

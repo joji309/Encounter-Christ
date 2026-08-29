@@ -3,6 +3,7 @@ import { Cinzel, Inter } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { SITE_URL } from '@/lib/site-url';
+import { fetchSiteStatus } from '@/lib/api';
 import './globals.css';
 
 const cinzel = Cinzel({
@@ -60,11 +61,27 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const siteStatus = await fetchSiteStatus();
+  if (siteStatus.maintenance_mode) {
+    return (
+      <html lang="en" className={`${cinzel.variable} ${inter.variable}`}>
+        <body className="min-h-screen bg-stone-950 text-amber-50">
+          <main className="flex min-h-screen items-center justify-center px-6 text-center">
+            <div className="max-w-xl space-y-6">
+              <p className="text-xs font-mono uppercase tracking-[0.3em] text-amber-400">Encounter Christ</p>
+              <h1 className="font-serif text-4xl font-bold sm:text-6xl">We&apos;ll be right back</h1>
+              <p className="text-sm leading-relaxed text-stone-300">{siteStatus.maintenance_message}</p>
+            </div>
+          </main>
+        </body>
+      </html>
+    );
+  }
   return (
     <html lang="en" className={`${cinzel.variable} ${inter.variable} scroll-smooth`}>
       <body className="font-sans antialiased min-h-screen flex flex-col text-stone-800 selection:bg-amber-500/30 selection:text-amber-200">
