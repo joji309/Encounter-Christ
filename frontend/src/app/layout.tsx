@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Cinzel, Inter } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { SITE_URL } from '@/lib/site-url';
 import './globals.css';
 
 const cinzel = Cinzel({
@@ -16,7 +17,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://encounterchrist.vercel.app'),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: 'Encounter Christ | Eucharistic Miracles, The Science & Catholic Faith',
     template: '%s | Encounter Christ',
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://encounterchrist.vercel.app',
+    url: SITE_URL,
     title: 'Encounter Christ | Eucharistic Miracles & The Catholic Faith',
     description: 'Encounter the living Jesus Christ through the verified forensic evidence of Eucharistic Miracles.',
     siteName: 'Encounter Christ',

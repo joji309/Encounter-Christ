@@ -1,8 +1,9 @@
 import { MetadataRoute } from 'next';
 import { INITIAL_MIRACLES } from '@/data/miraclesData';
+import { SITE_URL } from '@/lib/site-url';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://encounterchrist.vercel.app';
+  const baseUrl = SITE_URL;
 
   const staticPages = [
     '',

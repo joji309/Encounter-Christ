@@ -210,7 +210,7 @@ JAZZMIN_SETTINGS = {
     # ── Top Navigation Bar ───────────────────────────────────────────────────
     'topmenu_links': [
         # Link to the live website
-        {'name': '🌐 View Website', 'url': 'http://localhost:8000', 'new_window': True},
+        {'name': '🌐 View Website', 'url': '/', 'new_window': True},
         {'name': '📍 Miracles', 'url': '/admin/core/miracle/', 'permissions': ['core.view_miracle']},
         {'name': '🕯 Prayers', 'url': '/admin/core/prayerintention/', 'permissions': ['core.view_prayerintention']},
         {'name': '📖 Reflections', 'url': '/admin/core/dailyreflection/', 'permissions': ['core.view_dailyreflection']},
@@ -218,7 +218,7 @@ JAZZMIN_SETTINGS = {
 
     # ── User Menu (top-right corner) ─────────────────────────────────────────
     'usermenu_links': [
-        {'name': '🌐 View Website', 'url': 'http://localhost:8000', 'new_window': True},
+        {'name': '🌐 View Website', 'url': '/', 'new_window': True},
     ],
 
     # ── Sidebar Navigation ───────────────────────────────────────────────────

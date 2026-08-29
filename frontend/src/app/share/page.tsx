@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Share2, Copy, Check, MessageCircle, Send, Sparkles, Download, ArrowRight, Heart } from 'lucide-react';
+import { SITE_URL } from '@/lib/site-url';
 
 export default function ShareJesusPage() {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
@@ -9,17 +10,17 @@ export default function ShareJesusPage() {
   const shareableSnippets = [
     {
       title: 'Eucharistic Miracle & Forensic Science Spotlight',
-      text: 'Did you know that independent laboratory studies of Eucharistic Miracles (like Buenos Aires and Lanciano) reveal living human left-ventricular heart muscle and AB+ blood under intense trauma? Discover the evidence at https://encounterchrist.vercel.app',
+      text: `Did you know that independent laboratory studies of Eucharistic Miracles (like Buenos Aires and Lanciano) reveal living human left-ventricular heart muscle and AB+ blood under intense trauma? Discover the evidence at ${SITE_URL}`,
       tag: 'Scientific Evidence'
     },
     {
       title: 'Invitation for a Friend Who Left Church',
-      text: 'Hey friend, I was thinking about you today. If you ever feel like you want to return to prayer or Mass, know that Jesus is waiting with open arms and zero judgment. Check this out: https://encounterchrist.vercel.app/return-home',
+      text: `Hey friend, I was thinking about you today. If you ever feel like you want to return to prayer or Mass, know that Jesus is waiting with open arms and zero judgment. Check this out: ${SITE_URL}/return-home`,
       tag: 'Returning Home'
     },
     {
       title: 'Bread of Life (John 6:35) Reflection',
-      text: '“I am the bread of life; whoever comes to me shall not hunger, and whoever believes in me shall never thirst.” — Jesus (John 6:35). Encounter Christ today at https://encounterchrist.vercel.app',
+      text: `“I am the bread of life; whoever comes to me shall not hunger, and whoever believes in me shall never thirst.” — Jesus (John 6:35). Encounter Christ today at ${SITE_URL}`,
       tag: 'Scripture Verse'
     }
   ];
