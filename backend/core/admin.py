@@ -1,6 +1,26 @@
+from django import forms
+from django.conf import settings
 from django.contrib import admin
+from django.core.exceptions import ValidationError
 from django.utils.html import format_html
 from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event
+
+
+class MiracleAdminForm(forms.ModelForm):
+    """Give administrators a clear message instead of a serverless upload error."""
+
+    class Meta:
+        model = Miracle
+        fields = '__all__'
+
+    def clean_cover_image(self):
+        image = self.cleaned_data.get('cover_image')
+        if self.files.get('cover_image') and not settings.DEBUG and not settings.CLOUDINARY_ENABLED:
+            raise ValidationError(
+                'Image uploads require Cloudinary on Vercel. Add the three '
+                'CLOUDINARY_* environment variables, redeploy, then try again.'
+            )
+        return image
 
 
 @admin.register(Category)
@@ -16,6 +36,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Miracle)
 class MiracleAdmin(admin.ModelAdmin):
+    form = MiracleAdminForm
     list_display = [
         'title', 'location_city', 'location_country', 'year_occurred',
         'blood_type', 'church_approval', 'is_featured', 'views_count',

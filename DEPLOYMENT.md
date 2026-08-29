@@ -45,7 +45,8 @@ CSRF_TRUSTED_ORIGINS=https://encounterchrist.online,https://www.encounterchrist.
 NEXT_PUBLIC_SITE_URL=https://encounterchrist.online
 ```
 
-Optional Cloudinary variables are needed if the admin uploads media:
+Cloudinary variables are required if the admin uploads cover images. Vercel's
+serverless filesystem cannot store uploaded files permanently:
 
 ```text
 CLOUDINARY_CLOUD_NAME=<cloud-name>
