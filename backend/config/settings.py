@@ -80,6 +80,8 @@ TEMPLATES = [
         'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
+            # Jazzmin 3.0.5 still uses Django's removed ``length_is`` filter.
+            'builtins': ['core.templatetags.jazzmin_compat'],
             'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
