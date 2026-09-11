@@ -187,6 +187,17 @@ class SiteSettingsAdmin(admin.ModelAdmin):
             'description': 'Turn this on to replace public frontend pages with a maintenance screen. The admin panel and API remain available.',
             'fields': ('maintenance_mode', 'maintenance_message'),
         }),
+        ('Live Adoration Stream', {
+            'description': (
+                'Paste the YouTube URL of a live 24/7 adoration stream below. '
+                'The stream will appear on the Adoration Room page and will play '
+                'automatically when a visitor starts their Holy Hour meditation timer. '
+                'Accepted formats: https://www.youtube.com/watch?v=VIDEO_ID  |  '
+                'https://youtu.be/VIDEO_ID  |  https://www.youtube.com/live/VIDEO_ID. '
+                'Leave blank to hide the stream section entirely.'
+            ),
+            'fields': ('adoration_youtube_url',),
+        }),
     )
 
     def has_add_permission(self, request):

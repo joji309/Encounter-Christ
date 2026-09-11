@@ -193,8 +193,23 @@ class ApologeticsTopic(models.Model):
     def __str__(self):
         return self.question
 class SiteSettings(models.Model):
-    maintenance_mode = models.BooleanField(default=False)
-    maintenance_message = models.CharField(max_length=255, default='We are preparing something beautiful. Please check back soon.')
+    maintenance_mode    = models.BooleanField(default=False)
+    maintenance_message = models.CharField(
+        max_length=255,
+        default='We are preparing something beautiful. Please check back soon.'
+    )
+    adoration_youtube_url = models.URLField(
+        max_length=500,
+        blank=True,
+        default='',
+        help_text=(
+            'Paste the YouTube URL of the live adoration stream. Accepted formats:\n'
+            '  https://www.youtube.com/watch?v=VIDEO_ID\n'
+            '  https://youtu.be/VIDEO_ID\n'
+            '  https://www.youtube.com/live/VIDEO_ID\n'
+            'Leave blank to hide the live stream section on the Adoration page.'
+        )
+    )
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:

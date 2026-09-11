@@ -156,11 +156,13 @@ class OverviewStatsView(APIView):
             'total_testimonies': total_testimonies,
             'featured_miracles': featured_miracles,
         })
+
 class SiteStatusView(APIView):
     def get(self, request):
         settings = SiteSettings.objects.first()
         return Response({
-            'maintenance_mode': settings.maintenance_mode if settings else False,
-            'maintenance_message': settings.maintenance_message if settings else '',
+            'maintenance_mode':       settings.maintenance_mode if settings else False,
+            'maintenance_message':    settings.maintenance_message if settings else '',
+            'adoration_youtube_url':  settings.adoration_youtube_url if settings else '',
         })
 

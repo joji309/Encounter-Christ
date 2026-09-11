@@ -22,13 +22,13 @@ function getApiBaseUrl(): string {
 
   return API_BASE_URL;
 }
-export async function fetchSiteStatus(): Promise<{ maintenance_mode: boolean; maintenance_message: string }> {
+export async function fetchSiteStatus(): Promise<{ maintenance_mode: boolean; maintenance_message: string; adoration_youtube_url?: string }> {
   try {
     const res = await fetch(`${getApiBaseUrl()}/site-status/`, { cache: 'no-store' });
     if (!res.ok) throw new Error('Site status fetch failed');
     return await res.json();
   } catch {
-    return { maintenance_mode: false, maintenance_message: '' };
+    return { maintenance_mode: false, maintenance_message: '', adoration_youtube_url: '' };
   }
 }
 

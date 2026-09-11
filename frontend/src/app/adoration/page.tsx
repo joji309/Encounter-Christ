@@ -1,15 +1,31 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Flame, Clock, Play, Pause, RotateCcw, Volume2, Sparkles, BookOpen, Heart } from 'lucide-react';
 import AmbientAudioPlayer from '@/components/AmbientAudioPlayer';
+import LiveAdorationStream, { LiveAdorationStreamHandle } from '@/components/LiveAdorationStream';
+import { fetchSiteStatus } from '@/lib/api';
 
 export default function AdorationPage() {
   const [selectedDuration, setSelectedDuration] = useState<number>(15 * 60);
   const [timeLeft, setTimeLeft] = useState<number>(15 * 60);
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
   const [activePrayer, setActivePrayer] = useState<'ANIMA' | 'TANTUM' | 'DIVINE_PRAISES' | 'ST_THOMAS'>('ANIMA');
+  const [adorationYoutubeUrl, setAdorationYoutubeUrl] = useState<string>('');
+  const streamRef = useRef<LiveAdorationStreamHandle>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    fetchSiteStatus().then((status) => {
+      if (isMounted && status.adoration_youtube_url) {
+        setAdorationYoutubeUrl(status.adoration_youtube_url);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -19,6 +35,7 @@ export default function AdorationPage() {
       }, 1000);
     } else if (timeLeft === 0 && isTimerRunning) {
       setIsTimerRunning(false);
+      streamRef.current?.stop();
       try {
         const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
         const ctx = new AudioCtx();
@@ -40,6 +57,7 @@ export default function AdorationPage() {
     setSelectedDuration(mins * 60);
     setTimeLeft(mins * 60);
     setIsTimerRunning(false);
+    streamRef.current?.stop();
   };
 
   const formatTime = (seconds: number) => {
@@ -93,6 +111,15 @@ export default function AdorationPage() {
           </div>
         </div>
       </div>
+
+      {/* Live Adoration Stream (Configured via Django Admin Site Settings) */}
+      {adorationYoutubeUrl && (
+        <LiveAdorationStream
+          ref={streamRef}
+          youtubeUrl={adorationYoutubeUrl}
+          isPlaying={isTimerRunning}
+        />
+      )}
 
       {/* Two Column Layout: Holy Hour Timer & Eucharistic Prayers */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -175,6 +202,7 @@ export default function AdorationPage() {
               onClick={() => {
                 setIsTimerRunning(false);
                 setTimeLeft(selectedDuration);
+                streamRef.current?.stop();
               }}
               title="Reset Timer"
               className="p-3 bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 rounded-xl transition-all shadow-sm"
