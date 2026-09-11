@@ -5,13 +5,15 @@ import Image from 'next/image';
 import { Flame, Clock, Play, Pause, RotateCcw, Volume2, Sparkles, BookOpen, Heart } from 'lucide-react';
 import AmbientAudioPlayer from '@/components/AmbientAudioPlayer';
 import LiveAdorationStream, { LiveAdorationStreamHandle } from '@/components/LiveAdorationStream';
-import { fetchSiteStatus } from '@/lib/api';
+import { fetchSiteStatus, fetchEucharisticPrayers } from '@/lib/api';
+import { EucharisticPrayer, INITIAL_EUCHARISTIC_PRAYERS } from '@/data/miraclesData';
 
 export default function AdorationPage() {
   const [selectedDuration, setSelectedDuration] = useState<number>(15 * 60);
   const [timeLeft, setTimeLeft] = useState<number>(15 * 60);
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
-  const [activePrayer, setActivePrayer] = useState<'ANIMA' | 'TANTUM' | 'DIVINE_PRAISES' | 'ST_THOMAS'>('ANIMA');
+  const [prayers, setPrayers] = useState<EucharisticPrayer[]>(INITIAL_EUCHARISTIC_PRAYERS);
+  const [activePrayerId, setActivePrayerId] = useState<number | string>(INITIAL_EUCHARISTIC_PRAYERS[0]?.id || 1);
   const [adorationYoutubeUrl, setAdorationYoutubeUrl] = useState<string>('');
   const streamRef = useRef<LiveAdorationStreamHandle>(null);
 
@@ -22,6 +24,17 @@ export default function AdorationPage() {
         setAdorationYoutubeUrl(status.adoration_youtube_url);
       }
     });
+
+    fetchEucharisticPrayers().then((loadedPrayers) => {
+      if (isMounted && loadedPrayers.length > 0) {
+        setPrayers(loadedPrayers);
+        setActivePrayerId((prev) => {
+          const exists = loadedPrayers.some((p) => p.id === prev);
+          return exists ? prev : loadedPrayers[0].id;
+        });
+      }
+    });
+
     return () => {
       isMounted = false;
     };
@@ -101,7 +114,7 @@ export default function AdorationPage() {
               &ldquo;Be Still, and Know That I Am God&rdquo;
             </h1>
             <p className="text-sm sm:text-base text-stone-700 leading-relaxed font-serif italic font-medium">
-              &ldquo;Could you not watch with me one hour?&rdquo; — Matthew 26:40
+              &ldquo;Could you not watch with me one hour?&rdquo; &mdash; Matthew 26:40
             </p>
           </div>
 
@@ -224,118 +237,39 @@ export default function AdorationPage() {
 
           {/* Prayer Tabs */}
           <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setActivePrayer('ANIMA')}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                activePrayer === 'ANIMA'
-                  ? 'bg-amber-500 text-white shadow-sm'
-                  : 'bg-amber-100/70 text-amber-900 border border-amber-300 hover:bg-amber-200'
-              }`}
-            >
-              Anima Christi
-            </button>
-            <button
-              onClick={() => setActivePrayer('TANTUM')}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                activePrayer === 'TANTUM'
-                  ? 'bg-amber-500 text-white shadow-sm'
-                  : 'bg-amber-100/70 text-amber-900 border border-amber-300 hover:bg-amber-200'
-              }`}
-            >
-              Tantum Ergo
-            </button>
-            <button
-              onClick={() => setActivePrayer('DIVINE_PRAISES')}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                activePrayer === 'DIVINE_PRAISES'
-                  ? 'bg-amber-500 text-white shadow-sm'
-                  : 'bg-amber-100/70 text-amber-900 border border-amber-300 hover:bg-amber-200'
-              }`}
-            >
-              The Divine Praises
-            </button>
-            <button
-              onClick={() => setActivePrayer('ST_THOMAS')}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                activePrayer === 'ST_THOMAS'
-                  ? 'bg-amber-500 text-white shadow-sm'
-                  : 'bg-amber-100/70 text-amber-900 border border-amber-300 hover:bg-amber-200'
-              }`}
-            >
-              St. Thomas Aquinas
-            </button>
+            {prayers.map((prayer) => {
+              const isActive = prayer.id === activePrayerId;
+              return (
+                <button
+                  key={prayer.id}
+                  onClick={() => setActivePrayerId(prayer.id)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    isActive
+                      ? 'bg-amber-500 text-white shadow-sm'
+                      : 'bg-amber-100/70 text-amber-900 border border-amber-300 hover:bg-amber-200'
+                  }`}
+                >
+                  {prayer.tab_title}
+                </button>
+              );
+            })}
           </div>
 
           {/* Prayer Content Display */}
-          <div className="bg-amber-50/70 p-6 rounded-2xl border border-amber-200 leading-relaxed font-serif text-sm text-stone-800 font-medium">
-            {activePrayer === 'ANIMA' && (
-              <div className="space-y-3">
-                <h4 className="font-bold text-amber-900 text-base">Anima Christi (Soul of Christ)</h4>
-                <p className="italic leading-relaxed">
-                  Soul of Christ, sanctify me.<br />
-                  Body of Christ, save me.<br />
-                  Blood of Christ, inebriate me.<br />
-                  Water from the side of Christ, wash me.<br />
-                  Passion of Christ, strengthen me.<br />
-                  O good Jesus, hear me.<br />
-                  Within Thy wounds hide me.<br />
-                  Suffer me not to be separated from Thee.<br />
-                  From the malicious enemy defend me.<br />
-                  In the hour of my death call me,<br />
-                  And bid me come unto Thee,<br />
-                  That with Thy Saints I may praise Thee,<br />
-                  Forever and ever. Amen.
-                </p>
+          {(() => {
+            const selectedPrayer = prayers.find((p) => p.id === activePrayerId) || prayers[0];
+            if (!selectedPrayer) return null;
+            return (
+              <div className="bg-amber-50/70 p-6 rounded-2xl border border-amber-200 leading-relaxed font-serif text-sm text-stone-800 font-medium">
+                <div className="space-y-3">
+                  <h4 className="font-bold text-amber-900 text-base">{selectedPrayer.title}</h4>
+                  <p className="italic leading-relaxed whitespace-pre-line">
+                    {selectedPrayer.content}
+                  </p>
+                </div>
               </div>
-            )}
-
-            {activePrayer === 'TANTUM' && (
-              <div className="space-y-3">
-                <h4 className="font-bold text-amber-900 text-base">Tantum Ergo Sacramentum</h4>
-                <p className="italic leading-relaxed">
-                  Down in adoration falling, Lo! the sacred Host we hail;<br />
-                  Lo! o&apos;er ancient forms departing, Newer rites of grace prevail;<br />
-                  Faith for all defects supplying, Where the feeble senses fail.<br /><br />
-                  To the everlasting Father, And the Son who comes on high,<br />
-                  With the Holy Ghost proceeding Forth from each eternally,<br />
-                  Be salvation, honor, blessing, Might and endless majesty. Amen.
-                </p>
-              </div>
-            )}
-
-            {activePrayer === 'DIVINE_PRAISES' && (
-              <div className="space-y-3">
-                <h4 className="font-bold text-amber-900 text-base">The Divine Praises (Laudes Divinae)</h4>
-                <p className="italic text-xs leading-loose">
-                  Blessed be God.<br />
-                  Blessed be His Holy Name.<br />
-                  Blessed be Jesus Christ, true God and true Man.<br />
-                  Blessed be the Name of Jesus.<br />
-                  Blessed be His Most Sacred Heart.<br />
-                  Blessed be His Most Precious Blood.<br />
-                  Blessed be Jesus in the Most Holy Sacrament of the Altar.<br />
-                  Blessed be the Holy Spirit, the Paraclete.<br />
-                  Blessed be the great Mother of God, Mary most Holy.<br />
-                  Blessed be her Holy and Immaculate Conception.<br />
-                  Blessed be her Glorious Assumption.<br />
-                  Blessed be the name of Mary, Virgin and Mother.<br />
-                  Blessed be Saint Joseph, her most chaste spouse.<br />
-                  Blessed be God in His Angels and in His Saints. Amen.
-                </p>
-              </div>
-            )}
-
-            {activePrayer === 'ST_THOMAS' && (
-              <div className="space-y-3">
-                <h4 className="font-bold text-amber-900 text-base">Prayer of St. Thomas Aquinas</h4>
-                <p className="italic text-xs leading-relaxed">
-                  &ldquo;Almighty and everlasting God, behold I come to the Sacrament of Thine only-begotten Son, our Lord Jesus Christ: I come as one sick to the Physician of life, as an unclean person to the Fountain of mercy, as one blind to the Light of the eternal splendor, as one poor and needy to the Lord of heaven and earth.
-                  <br /><br />
-                  Therefore I beg of Thine immense bounty that Thou wouldst vouchsafe to heal my sickness, to wash away my defilements, to enlighten my blindness, to enrich my poverty, and to clothe my nakedness; that I may receive the Bread of Angels, the King of kings and Lord of lords.&rdquo;
-                </p>
-              </div>
-            )}
-          </div>
+            );
+          })()}
         </div>
       </div>
     </div>

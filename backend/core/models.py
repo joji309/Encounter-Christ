@@ -219,3 +219,35 @@ class SiteSettings(models.Model):
     def __str__(self):
         return 'Site settings'
 
+
+class EucharisticPrayer(models.Model):
+    tab_title = models.CharField(
+        max_length=100,
+        help_text='Short title displayed on the prayer tab button (e.g. "Anima Christi", "Tantum Ergo")'
+    )
+    title = models.CharField(
+        max_length=200,
+        help_text='Full title heading displayed above the prayer text (e.g. "Anima Christi (Soul of Christ)")'
+    )
+    content = models.TextField(
+        help_text='Full prayer text. Stanzas and line breaks will be preserved.'
+    )
+    order = models.PositiveIntegerField(
+        default=0,
+        help_text='Order in which this prayer tab appears (lower numbers appear first).'
+    )
+    is_active = models.BooleanField(
+        default=True,
+        help_text='Uncheck to hide this prayer without deleting it.'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Sacred Eucharistic Prayer'
+        verbose_name_plural = 'Sacred Eucharistic Prayers'
+        ordering = ['order', 'id']
+
+    def __str__(self):
+        return f"{self.tab_title} ({self.title})"
+

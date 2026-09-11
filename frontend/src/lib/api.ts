@@ -1,4 +1,4 @@
-import { Miracle, PrayerIntention, DailyReflection, ApologeticsTopic, Event, INITIAL_MIRACLES, INITIAL_PRAYERS, INITIAL_DAILY_REFLECTION } from '@/data/miraclesData';
+import { Miracle, PrayerIntention, DailyReflection, ApologeticsTopic, Event, EucharisticPrayer, INITIAL_MIRACLES, INITIAL_PRAYERS, INITIAL_DAILY_REFLECTION, INITIAL_EUCHARISTIC_PRAYERS } from '@/data/miraclesData';
 import { SITE_URL } from './site-url';
 
 // Browser requests stay same-origin; server rendering calls Django directly.
@@ -153,3 +153,16 @@ export async function fetchEvents(): Promise<Event[]> {
     return [];
   }
 }
+
+export async function fetchEucharisticPrayers(): Promise<EucharisticPrayer[]> {
+  try {
+    const res = await fetch(`${getApiBaseUrl()}/eucharistic-prayers/`, { cache: 'no-store' });
+    if (!res.ok) throw new Error('Eucharistic prayers fetch failed');
+    const data = await res.json();
+    const list = Array.isArray(data) ? data : data.results || [];
+    return list.length > 0 ? list : INITIAL_EUCHARISTIC_PRAYERS;
+  } catch {
+    return INITIAL_EUCHARISTIC_PRAYERS;
+  }
+}
+

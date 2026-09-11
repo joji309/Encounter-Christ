@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings
+from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings, EucharisticPrayer
 
 
 class MiracleAdminForm(forms.ModelForm):
@@ -202,3 +202,12 @@ class SiteSettingsAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return not SiteSettings.objects.exists()
+
+
+@admin.register(EucharisticPrayer)
+class EucharisticPrayerAdmin(admin.ModelAdmin):
+    list_display = ['tab_title', 'title', 'order', 'is_active', 'updated_at']
+    list_editable = ['order', 'is_active']
+    search_fields = ['tab_title', 'title', 'content']
+    list_filter = ['is_active']
+    ordering = ['order', 'id']

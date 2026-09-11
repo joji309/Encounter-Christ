@@ -1,7 +1,7 @@
 import datetime
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from core.models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event
+from core.models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, EucharisticPrayer
 
 
 class Command(BaseCommand):
@@ -367,6 +367,86 @@ There is not a single Church Father who taught that the Eucharist is merely a sy
             Testimony.objects.get_or_create(
                 title=t_data['title'],
                 defaults=t_data
+            )
+
+        # 8. Eucharistic Prayers
+        eucharistic_prayers_seed = [
+            {
+                'tab_title': 'Anima Christi',
+                'title': 'Anima Christi (Soul of Christ)',
+                'content': (
+                    "Soul of Christ, sanctify me.\n"
+                    "Body of Christ, save me.\n"
+                    "Blood of Christ, inebriate me.\n"
+                    "Water from the side of Christ, wash me.\n"
+                    "Passion of Christ, strengthen me.\n"
+                    "O good Jesus, hear me.\n"
+                    "Within Thy wounds hide me.\n"
+                    "Suffer me not to be separated from Thee.\n"
+                    "From the malicious enemy defend me.\n"
+                    "In the hour of my death call me,\n"
+                    "And bid me come unto Thee,\n"
+                    "That with Thy Saints I may praise Thee,\n"
+                    "Forever and ever. Amen."
+                ),
+                'order': 1,
+                'is_active': True,
+            },
+            {
+                'tab_title': 'Tantum Ergo',
+                'title': 'Tantum Ergo Sacramentum',
+                'content': (
+                    "Down in adoration falling, Lo! the sacred Host we hail;\n"
+                    "Lo! o'er ancient forms departing, Newer rites of grace prevail;\n"
+                    "Faith for all defects supplying, Where the feeble senses fail.\n\n"
+                    "To the everlasting Father, And the Son who comes on high,\n"
+                    "With the Holy Ghost proceeding Forth from each eternally,\n"
+                    "Be salvation, honor, blessing, Might and endless majesty. Amen."
+                ),
+                'order': 2,
+                'is_active': True,
+            },
+            {
+                'tab_title': 'The Divine Praises',
+                'title': 'The Divine Praises (Laudes Divinae)',
+                'content': (
+                    "Blessed be God.\n"
+                    "Blessed be His Holy Name.\n"
+                    "Blessed be Jesus Christ, true God and true Man.\n"
+                    "Blessed be the Name of Jesus.\n"
+                    "Blessed be His Most Sacred Heart.\n"
+                    "Blessed be His Most Precious Blood.\n"
+                    "Blessed be Jesus in the Most Holy Sacrament of the Altar.\n"
+                    "Blessed be the Holy Spirit, the Paraclete.\n"
+                    "Blessed be the great Mother of God, Mary most Holy.\n"
+                    "Blessed be her Holy and Immaculate Conception.\n"
+                    "Blessed be her Glorious Assumption.\n"
+                    "Blessed be the name of Mary, Virgin and Mother.\n"
+                    "Blessed be Saint Joseph, her most chaste spouse.\n"
+                    "Blessed be God in His Angels and in His Saints. Amen."
+                ),
+                'order': 3,
+                'is_active': True,
+            },
+            {
+                'tab_title': 'St. Thomas Aquinas',
+                'title': 'Prayer of St. Thomas Aquinas',
+                'content': (
+                    "\"Almighty and everlasting God, behold I come to the Sacrament of Thine only-begotten Son, our Lord Jesus Christ: "
+                    "I come as one sick to the Physician of life, as an unclean person to the Fountain of mercy, as one blind to the Light of the eternal splendor, "
+                    "as one poor and needy to the Lord of heaven and earth.\n\n"
+                    "Therefore I beg of Thine immense bounty that Thou wouldst vouchsafe to heal my sickness, to wash away my defilements, to enlighten my blindness, "
+                    "to enrich my poverty, and to clothe my nakedness; that I may receive the Bread of Angels, the King of kings and Lord of lords.\""
+                ),
+                'order': 4,
+                'is_active': True,
+            },
+        ]
+
+        for ep_data in eucharistic_prayers_seed:
+            EucharisticPrayer.objects.get_or_create(
+                tab_title=ep_data['tab_title'],
+                defaults=ep_data
             )
 
         self.stdout.write(self.style.SUCCESS("Database seeded successfully with authentic Eucharistic miracles, apologetics, prayers, and reflections!"))

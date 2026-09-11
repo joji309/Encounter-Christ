@@ -5,7 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings
+from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings, EucharisticPrayer
 from .serializers import (
     CategorySerializer,
     MiracleListSerializer,
@@ -15,6 +15,7 @@ from .serializers import (
     DailyReflectionSerializer,
     ApologeticsTopicSerializer,
     EventSerializer,
+    EucharisticPrayerSerializer,
 )
 
 
@@ -141,6 +142,14 @@ class EventViewSet(viewsets.ReadOnlyModelViewSet):
             except (ValueError, TypeError):
                 pass
         return queryset
+
+
+class EucharisticPrayerViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = EucharisticPrayerSerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        return EucharisticPrayer.objects.filter(is_active=True).order_by('order', 'id')
 
 
 class OverviewStatsView(APIView):

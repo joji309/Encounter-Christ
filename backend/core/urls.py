@@ -10,6 +10,7 @@ from .views import (
     ApologeticsTopicViewSet,
     EventViewSet,
     OverviewStatsView,
+    EucharisticPrayerViewSet,
 )
 
 router = DefaultRouter()
@@ -20,6 +21,7 @@ router.register(r'testimonies', TestimonyViewSet, basename='testimony')
 router.register(r'reflections', DailyReflectionViewSet, basename='reflection')
 router.register(r'apologetics', ApologeticsTopicViewSet, basename='apologetic')
 router.register(r'events', EventViewSet, basename='event')
+router.register(r'eucharistic-prayers', EucharisticPrayerViewSet, basename='eucharistic-prayer')
 
 urlpatterns = [
     path('site-status/', SiteStatusView.as_view(), name='site-status'),

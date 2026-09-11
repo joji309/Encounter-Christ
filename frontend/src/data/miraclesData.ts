@@ -74,6 +74,15 @@ export interface ApologeticsTopic {
   church_fathers_quote?: string;
 }
 
+export interface EucharisticPrayer {
+  id: number | string;
+  tab_title: string;
+  title: string;
+  content: string;
+  order?: number;
+  is_active?: boolean;
+}
+
 export const INITIAL_MIRACLES: Miracle[] = [
   {
     id: 1,
@@ -266,3 +275,72 @@ export const INITIAL_DAILY_REFLECTION: DailyReflection = {
   reflection_body: "When we kneel before the Blessed Sacrament, we are not looking at a metaphor. We are in the physical, living presence of the Creator of the Universe, who loved us to the point of giving His life on the Cross and remaining with us in humble bread until the end of time. When doubts cloud your heart, look at the scientific realities of Lanciano and Buenos Aires—Christ's heart still beats with boundless mercy for you.",
   closing_prayer: "O Jesus, Present in the Most Blessed Sacrament, I believe in You, I adore You, I hope in You, and I love You with all my heart. Draw me close to Your Sacred Heart today. Amen."
 };
+
+export const INITIAL_EUCHARISTIC_PRAYERS: EucharisticPrayer[] = [
+  {
+    id: 1,
+    tab_title: 'Anima Christi',
+    title: 'Anima Christi (Soul of Christ)',
+    content: `Soul of Christ, sanctify me.
+Body of Christ, save me.
+Blood of Christ, inebriate me.
+Water from the side of Christ, wash me.
+Passion of Christ, strengthen me.
+O good Jesus, hear me.
+Within Thy wounds hide me.
+Suffer me not to be separated from Thee.
+From the malicious enemy defend me.
+In the hour of my death call me,
+And bid me come unto Thee,
+That with Thy Saints I may praise Thee,
+Forever and ever. Amen.`,
+    order: 1,
+    is_active: true
+  },
+  {
+    id: 2,
+    tab_title: 'Tantum Ergo',
+    title: 'Tantum Ergo Sacramentum',
+    content: `Down in adoration falling, Lo! the sacred Host we hail;
+Lo! o'er ancient forms departing, Newer rites of grace prevail;
+Faith for all defects supplying, Where the feeble senses fail.
+
+To the everlasting Father, And the Son who comes on high,
+With the Holy Ghost proceeding Forth from each eternally,
+Be salvation, honor, blessing, Might and endless majesty. Amen.`,
+    order: 2,
+    is_active: true
+  },
+  {
+    id: 3,
+    tab_title: 'The Divine Praises',
+    title: 'The Divine Praises (Laudes Divinae)',
+    content: `Blessed be God.
+Blessed be His Holy Name.
+Blessed be Jesus Christ, true God and true Man.
+Blessed be the Name of Jesus.
+Blessed be His Most Sacred Heart.
+Blessed be His Most Precious Blood.
+Blessed be Jesus in the Most Holy Sacrament of the Altar.
+Blessed be the Holy Spirit, the Paraclete.
+Blessed be the great Mother of God, Mary most Holy.
+Blessed be her Holy and Immaculate Conception.
+Blessed be her Glorious Assumption.
+Blessed be the name of Mary, Virgin and Mother.
+Blessed be Saint Joseph, her most chaste spouse.
+Blessed be God in His Angels and in His Saints. Amen.`,
+    order: 3,
+    is_active: true
+  },
+  {
+    id: 4,
+    tab_title: 'St. Thomas Aquinas',
+    title: 'Prayer of St. Thomas Aquinas',
+    content: `"Almighty and everlasting God, behold I come to the Sacrament of Thine only-begotten Son, our Lord Jesus Christ: I come as one sick to the Physician of life, as an unclean person to the Fountain of mercy, as one blind to the Light of the eternal splendor, as one poor and needy to the Lord of heaven and earth.
+
+Therefore I beg of Thine immense bounty that Thou wouldst vouchsafe to heal my sickness, to wash away my defilements, to enlighten my blindness, to enrich my poverty, and to clothe my nakedness; that I may receive the Bread of Angels, the King of kings and Lord of lords."`,
+    order: 4,
+    is_active: true
+  }
+];
+

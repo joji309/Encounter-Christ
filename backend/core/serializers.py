@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings
+from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings, EucharisticPrayer
 
 class SiteSettingsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -102,3 +102,9 @@ class ApologeticsTopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = ApologeticsTopic
         fields = '__all__'
+
+
+class EucharisticPrayerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EucharisticPrayer
+        fields = ['id', 'tab_title', 'title', 'content', 'order', 'is_active', 'updated_at']
