@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: MiraclePageProps): Promise<Me
     openGraph: {
       title: `${miracle.title} | Encounter Christ`,
       description: miracle.summary,
-      images: [{ url: miracle.cover_image_url }],
+      images: [{ url: miracle.cover_image_url || '/logo.png' }],
     },
   };
 }
@@ -104,7 +104,7 @@ export default async function MiracleDetailPage({ params }: MiraclePageProps) {
       {/* Featured Image */}
       <div className="relative h-80 sm:h-[450px] w-full rounded-3xl overflow-hidden shadow-xl border border-amber-300 bg-amber-100">
         <Image
-          src={miracle.cover_image_url}
+          src={miracle.cover_image_url || '/logo.png'}
           alt={miracle.title}
           fill
           priority

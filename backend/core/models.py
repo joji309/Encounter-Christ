@@ -41,9 +41,9 @@ class Miracle(models.Model):
 
     # Visual & Media
     cover_image = models.ImageField(upload_to='miracles/', null=True, blank=True)
-    cover_image_url = models.URLField(max_length=500, blank=True, help_text="Fallback external URL or Cloudinary URL")
-    relic_image_url = models.URLField(max_length=500, blank=True)
-    audio_narration_url = models.URLField(max_length=500, blank=True)
+    cover_image_url = models.URLField(max_length=2000, blank=True, help_text="Direct image URL (e.g. Unsplash, Wikimedia, Cloudinary, Imgur)")
+    relic_image_url = models.URLField(max_length=2000, blank=True)
+    audio_narration_url = models.URLField(max_length=2000, blank=True)
 
     # Narrative Content
     summary = models.TextField(help_text="Concise 2-3 sentence overview for cards and meta descriptions")
@@ -74,6 +74,13 @@ class Miracle(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
+        if self.cover_image and not self.cover_image_url:
+            try:
+                url = self.cover_image.url
+                if url.startswith('http://') or url.startswith('https://'):
+                    self.cover_image_url = url
+            except Exception:
+                pass
         super().save(*args, **kwargs)
 
     def __str__(self):

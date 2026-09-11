@@ -7,7 +7,7 @@ from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflecti
 
 
 class MiracleAdminForm(forms.ModelForm):
-    """Give administrators a clear message instead of a serverless upload error."""
+    """Give administrators clear guidance for image uploads and direct URLs."""
 
     class Meta:
         model = Miracle
@@ -17,8 +17,8 @@ class MiracleAdminForm(forms.ModelForm):
         image = self.cleaned_data.get('cover_image')
         if self.files.get('cover_image') and not settings.DEBUG and not settings.CLOUDINARY_ENABLED:
             raise ValidationError(
-                'Image uploads require Cloudinary on Vercel. Add the three '
-                'CLOUDINARY_* environment variables, redeploy, then try again.'
+                'Direct file uploads require Cloudinary on Vercel serverless. '
+                'Add the three CLOUDINARY_* environment variables, or simply paste the direct image link into "Cover image url".'
             )
         return image
 
@@ -56,6 +56,7 @@ class MiracleAdmin(admin.ModelAdmin):
             'fields': ('latitude', 'longitude', 'map_coordinate_preview'),
         }),
         ('Imagery & Audio', {
+            'description': 'Add the miracle photo. You can either paste an online image URL (e.g. from Unsplash, Wikimedia, Imgur, Cloudinary) into "Cover image url" or upload an image file.',
             'fields': ('cover_image', 'cover_image_url', 'relic_image_url', 'audio_narration_url')
         }),
         ('Narrative & Story', {
@@ -70,9 +71,19 @@ class MiracleAdmin(admin.ModelAdmin):
     )
 
     def image_preview(self, obj):
-        url = obj.cover_image.url if obj.cover_image else obj.cover_image_url
+        url = None
+        if obj.cover_image_url and (obj.cover_image_url.startswith('http://') or obj.cover_image_url.startswith('https://')):
+            url = obj.cover_image_url
+        elif obj.cover_image:
+            try:
+                url = obj.cover_image.url
+            except Exception:
+                url = obj.cover_image_url
+        elif obj.cover_image_url:
+            url = obj.cover_image_url
+
         if url:
-            return format_html('<img src="{}" width="60" height="40" style="object-fit:cover; border-radius:4px;" />', url)
+            return format_html('<img src="{}" width="60" height="40" style="object-fit:cover; border-radius:4px; border:1px solid #d1d5db;" onerror="this.style.display=\'none\'" />', url)
         return "-"
     image_preview.short_description = 'Preview'
 

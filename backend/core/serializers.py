@@ -16,14 +16,31 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class MiracleImageUrlMixin:
-    """Prefer the image uploaded through Django admin over a manual URL."""
+    """Intelligently return the best available image URL."""
 
     cover_image_url = serializers.SerializerMethodField()
 
     def get_cover_image_url(self, obj):
+        # 1. Prefer explicit full http/https URL if provided
+        if obj.cover_image_url and (obj.cover_image_url.startswith('http://') or obj.cover_image_url.startswith('https://')):
+            return obj.cover_image_url
+
+        # 2. Check uploaded cover_image (Cloudinary or local storage)
         if obj.cover_image:
-            return obj.cover_image.url
-        return obj.cover_image_url
+            try:
+                url = obj.cover_image.url
+                if url.startswith('http://') or url.startswith('https://'):
+                    return url
+                # If relative /media/ url and request context exists, build absolute URL
+                request = self.context.get('request')
+                if request:
+                    return request.build_absolute_uri(url)
+                return url
+            except Exception:
+                pass
+
+        # 3. Fallback to cover_image_url or empty string
+        return obj.cover_image_url or ""
 
 class MiracleListSerializer(MiracleImageUrlMixin, serializers.ModelSerializer):
     category_name = serializers.CharField(source='category.name', read_only=True)
