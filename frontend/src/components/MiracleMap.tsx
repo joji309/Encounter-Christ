@@ -303,12 +303,11 @@ export default function MiracleMap({ miracles }: MiracleMapProps) {
             style={{ minHeight: '480px', zIndex: 0 }}
           />
           {/* Attribution overlay */}
-          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-4 py-2 bg-amber-50/80 backdrop-blur-sm border-t border-amber-200 text-[10px] text-amber-900 font-mono z-[1000]">
+          <div className="absolute bottom-0 left-0 right-0 flex items-center px-4 py-2 bg-amber-50/80 backdrop-blur-sm border-t border-amber-200 text-[10px] text-amber-900 font-mono z-[1000]">
             <span className="flex items-center gap-1">
               <MapPin className="w-3 h-3 text-amber-600" />
               Lat/Lng Georeferenced — All {miracles.length} Documented Miracles
             </span>
-            <span>Managed via Django Admin Panel</span>
           </div>
         </div>
 
