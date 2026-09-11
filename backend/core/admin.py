@@ -1,13 +1,11 @@
 from django import forms
-from django.conf import settings
 from django.contrib import admin
-from django.core.exceptions import ValidationError
 from django.utils.html import format_html
 from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings
 
 
 class MiracleAdminForm(forms.ModelForm):
-    """Give administrators clear guidance for image uploads."""
+    """Admin form for Miracle. Images are stored on Cloudinary."""
 
     class Meta:
         model = Miracle
@@ -15,11 +13,6 @@ class MiracleAdminForm(forms.ModelForm):
 
     def clean_cover_image(self):
         image = self.cleaned_data.get('cover_image')
-        if self.files.get('cover_image') and not settings.DEBUG and not settings.CLOUDINARY_ENABLED:
-            raise ValidationError(
-                'Direct file uploads require Cloudinary on Vercel serverless. '
-                'Please add the three CLOUDINARY_* environment variables to your Vercel settings.'
-            )
         return image
 
 

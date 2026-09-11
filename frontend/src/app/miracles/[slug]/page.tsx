@@ -102,14 +102,14 @@ export default async function MiracleDetailPage({ params }: MiraclePageProps) {
       </div>
 
       {/* Featured Image */}
-      <div className="relative h-80 sm:h-[450px] w-full rounded-3xl overflow-hidden shadow-xl border border-amber-300 bg-amber-100">
+      <div className="relative h-80 sm:h-[450px] w-full rounded-3xl overflow-hidden shadow-xl border border-amber-300 bg-gradient-to-br from-amber-50 via-stone-100 to-amber-100">
         <Image
           src={miracle.cover_image_url || '/logo.png'}
           alt={miracle.title}
           fill
           priority
           sizes="(max-width: 1024px) 100vw, 1024px"
-          className="object-cover"
+          className="object-contain"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-transparent to-transparent" />
       </div>

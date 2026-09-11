@@ -12,13 +12,13 @@ export default function MiracleCard({ miracle }: MiracleCardProps) {
   return (
     <div className="sacred-glass-card rounded-3xl overflow-hidden group flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 border border-amber-300/70 bg-white/95 shadow-md">
       {/* Cover Image Container */}
-      <div className="relative h-56 w-full overflow-hidden bg-amber-100">
+      <div className="relative h-56 w-full overflow-hidden bg-gradient-to-br from-amber-50 via-stone-100 to-amber-100">
         <Image
           src={miracle.cover_image_url || '/logo.png'}
           alt={miracle.title}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover group-hover:scale-105 transition-transform duration-700"
+          className="object-contain group-hover:scale-105 transition-transform duration-700"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent" />
         

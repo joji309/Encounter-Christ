@@ -317,13 +317,13 @@ export default function MiracleMap({ miracles }: MiracleMapProps) {
           {selectedMiracle ? (
             <div className="space-y-4">
               {/* Cover Image */}
-              <div className="relative h-44 w-full rounded-2xl overflow-hidden bg-amber-100 shadow-md">
+              <div className="relative h-44 w-full rounded-2xl overflow-hidden bg-gradient-to-br from-amber-50 via-stone-100 to-amber-100 shadow-md">
                 <Image
                   src={selectedMiracle.cover_image_url || '/logo.png'}
                   alt={selectedMiracle.title}
                   fill
                   sizes="(max-width: 768px) 100vw, 400px"
-                  className="object-cover"
+                  className="object-contain"
                 />
                 <div className="absolute top-2 right-2 px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-500 text-white shadow">
                   {selectedMiracle.century}
