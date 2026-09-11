@@ -16,37 +16,23 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class MiracleImageUrlMixin:
-    """Intelligently return the best available image URL."""
+    """Return the uploaded cover image URL for the miracle."""
 
     cover_image_url = serializers.SerializerMethodField()
 
     def get_cover_image_url(self, obj):
-        # 1. If an image is uploaded to cover_image (Cloudinary or full URL), prefer the uploaded image!
         if obj.cover_image:
             try:
                 url = obj.cover_image.url
                 if url.startswith('http://') or url.startswith('https://'):
                     return url
-            except Exception:
-                pass
-
-        # 2. If an external URL is provided in cover_image_url (e.g. Unsplash, Wikimedia, Imgur, direct link)
-        if obj.cover_image_url and (obj.cover_image_url.startswith('http://') or obj.cover_image_url.startswith('https://')):
-            return obj.cover_image_url
-
-        # 3. If cover_image is a local relative /media/ path
-        if obj.cover_image:
-            try:
-                url = obj.cover_image.url
                 request = self.context.get('request')
                 if request:
                     return request.build_absolute_uri(url)
                 return url
             except Exception:
                 pass
-
-        # 4. Fallback to cover_image_url or empty string
-        return obj.cover_image_url or ""
+        return ""
 
 class MiracleListSerializer(MiracleImageUrlMixin, serializers.ModelSerializer):
     cover_image_url = serializers.SerializerMethodField()

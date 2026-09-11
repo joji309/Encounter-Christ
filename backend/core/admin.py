@@ -7,7 +7,7 @@ from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflecti
 
 
 class MiracleAdminForm(forms.ModelForm):
-    """Give administrators clear guidance for image uploads and direct URLs."""
+    """Give administrators clear guidance for image uploads."""
 
     class Meta:
         model = Miracle
@@ -18,7 +18,7 @@ class MiracleAdminForm(forms.ModelForm):
         if self.files.get('cover_image') and not settings.DEBUG and not settings.CLOUDINARY_ENABLED:
             raise ValidationError(
                 'Direct file uploads require Cloudinary on Vercel serverless. '
-                'Add the three CLOUDINARY_* environment variables, or simply paste the direct image link into "Cover image url".'
+                'Please add the three CLOUDINARY_* environment variables to your Vercel settings.'
             )
         return image
 
@@ -56,8 +56,8 @@ class MiracleAdmin(admin.ModelAdmin):
             'fields': ('latitude', 'longitude', 'map_coordinate_preview'),
         }),
         ('Imagery & Audio', {
-            'description': 'Add the miracle photo. You can either paste an online image URL (e.g. from Unsplash, Wikimedia, Imgur, Cloudinary) into "Cover image url" or upload an image file.',
-            'fields': ('cover_image', 'cover_image_url', 'relic_image_url', 'audio_narration_url')
+            'description': 'Upload the miracle photo here. It is automatically stored securely on Cloudinary.',
+            'fields': ('cover_image', 'relic_image_url', 'audio_narration_url')
         }),
         ('Narrative & Story', {
             'fields': ('summary', 'full_story', 'key_spiritual_message', 'scripture_verse')
@@ -70,30 +70,14 @@ class MiracleAdmin(admin.ModelAdmin):
         }),
     )
 
-    def save_model(self, request, obj, form, change):
-        super().save_model(request, obj, form, change)
-        if obj.cover_image:
-            try:
-                url = obj.cover_image.url
-                if url.startswith('http://') or url.startswith('https://'):
-                    if obj.cover_image_url != url:
-                        obj.cover_image_url = url
-                        obj.save(update_fields=['cover_image_url'])
-            except Exception:
-                pass
-
     def image_preview(self, obj):
-        url = None
         if obj.cover_image:
             try:
                 url = obj.cover_image.url
+                if url:
+                    return format_html('<img src="{}" width="60" height="40" style="object-fit:cover; border-radius:4px; border:1px solid #d1d5db;" onerror="this.style.display=\'none\'" />', url)
             except Exception:
                 pass
-        if not url and obj.cover_image_url:
-            url = obj.cover_image_url
-
-        if url:
-            return format_html('<img src="{}" width="60" height="40" style="object-fit:cover; border-radius:4px; border:1px solid #d1d5db;" onerror="this.style.display=\'none\'" />', url)
         return "-"
     image_preview.short_description = 'Preview'
 

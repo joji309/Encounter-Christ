@@ -48,7 +48,6 @@ class Command(BaseCommand):
                 'century': '20th Century (1996)',
                 'latitude': -34.603722,
                 'longitude': -58.381592,
-                'cover_image_url': 'https://images.unsplash.com/photo-1548625361-195fe578b871?auto=format&fit=crop&w=1200&q=80',
                 'summary': 'A discarded host in the Church of Santa Maria turned into living heart tissue under the oversight of Cardinal Jorge Bergoglio (now Pope Francis). Blind testing at Columbia University confirmed living cardiac muscle.',
                 'full_story': """On August 18, 1996, at 7:00 PM, at the parish church of Santa Maria in Buenos Aires, a consecrated Host was found discarded at the back of the church. The priest placed it in a vessel of water and placed it in the tabernacle.
 
@@ -76,7 +75,6 @@ In 1999, Dr. Ricardo Castañón Gómez took samples to New York for blind analys
                 'century': '8th Century (750 AD)',
                 'latitude': 42.2289,
                 'longitude': 14.3905,
-                'cover_image_url': 'https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&w=1200&q=80',
                 'summary': 'The oldest and most thoroughly examined Eucharistic miracle. A Basilian monk doubting the Real Presence saw the Host turn to visible flesh and the wine into five clots of blood. Over 1,250 years later, the flesh and blood remain uncorrupted without preservatives.',
                 'full_story': """In the 8th century in Lanciano, Italy, a monk of the Order of St. Basil experienced severe doubts about whether the bread and wine truly became the Body and Blood of Jesus Christ during the Holy Sacrifice of the Mass.
 
@@ -102,7 +100,6 @@ One morning, while celebrating Mass, after pronouncing the words of consecration
                 'century': '21st Century (2013)',
                 'latitude': 51.2070,
                 'longitude': 16.1550,
-                'cover_image_url': 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?auto=format&fit=crop&w=1200&q=80',
                 'summary': 'On Christmas Day 2013, a consecrated host fell during communion at St. Hyacinth Church. Placed in water, it developed red stains. Forensic medicine departments found striated heart muscle in agony.',
                 'full_story': """On December 25, 2013, at the Church of Saint Hyacinth in Legnica, Poland, a Host fell on the floor during the distribution of Holy Communion. In accordance with church rubrics, the priest picked it up and placed it in a container with water.
 
@@ -128,7 +125,6 @@ Shortly afterward, red discolorations appeared. In January 2014, the Bishop form
                 'century': '21st Century (2008)',
                 'latitude': 53.4072,
                 'longitude': 23.5033,
-                'cover_image_url': 'https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=1200&q=80',
                 'summary': 'At St. Anthony of Padua Church in Sokółka, a dropped host developed a bright red clot. Two leading histopathologists confirmed that the heart muscle fibers were inextricably woven into the bread structure on a microscopic level—a physical impossibility through human manipulation.',
                 'full_story': """On October 12, 2008, during Mass at Saint Anthony’s parish church in Sokółka, a priest dropped a consecrated Host. It was picked up and placed into a small container of water in the sacristy safe.
 
@@ -156,7 +152,6 @@ Two world-respected specialists in pathological anatomy—Prof. Maria Sobaniec-�
                 'century': '21st Century (2006)',
                 'latitude': 17.5684,
                 'longitude': -99.3986,
-                'cover_image_url': 'https://images.unsplash.com/photo-1543807535-eceef0bc6599?auto=format&fit=crop&w=1200&q=80',
                 'summary': 'During a parish retreat in Tixtla, Mexico, a host began exuding a reddish liquid. Multi-year forensic analysis by international scientific teams showed that the blood emanated from the interior of the host and contained intact, living cells.',
                 'full_story': """On October 21, 2006, during a parish retreat at Saint Martin of Tours in Tixtla, Diocese of Chilpancingo-Chilapa, a nun was distributing communion when she noticed that one Host in the ciborium had begun effusing a reddish fluid.
 
