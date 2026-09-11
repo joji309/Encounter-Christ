@@ -70,16 +70,26 @@ class MiracleAdmin(admin.ModelAdmin):
         }),
     )
 
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if obj.cover_image:
+            try:
+                url = obj.cover_image.url
+                if url.startswith('http://') or url.startswith('https://'):
+                    if obj.cover_image_url != url:
+                        obj.cover_image_url = url
+                        obj.save(update_fields=['cover_image_url'])
+            except Exception:
+                pass
+
     def image_preview(self, obj):
         url = None
-        if obj.cover_image_url and (obj.cover_image_url.startswith('http://') or obj.cover_image_url.startswith('https://')):
-            url = obj.cover_image_url
-        elif obj.cover_image:
+        if obj.cover_image:
             try:
                 url = obj.cover_image.url
             except Exception:
-                url = obj.cover_image_url
-        elif obj.cover_image_url:
+                pass
+        if not url and obj.cover_image_url:
             url = obj.cover_image_url
 
         if url:
