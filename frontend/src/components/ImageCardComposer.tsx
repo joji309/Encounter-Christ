@@ -229,7 +229,7 @@ export default function ImageCardComposer({
           return;
         }
       } catch {
-        // User cancelled — fall through to desktop fallback
+        // User cancelled -- fall through to desktop fallback
       }
     }
 
@@ -304,7 +304,7 @@ export default function ImageCardComposer({
                   </div>
                   <div>
                     <p className="text-xs font-bold text-amber-800">Upload a Photo</p>
-                    <p className="text-[10px] text-stone-500">JPG or PNG — any size</p>
+                    <p className="text-[10px] text-stone-500">JPG or PNG -- any size</p>
                   </div>
                   <input
                     ref={fileInputRef}
