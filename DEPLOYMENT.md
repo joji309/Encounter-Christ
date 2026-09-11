@@ -45,14 +45,20 @@ CSRF_TRUSTED_ORIGINS=https://encounterchrist.online,https://www.encounterchrist.
 NEXT_PUBLIC_SITE_URL=https://encounterchrist.online
 ```
 
-Cloudinary variables are required if the admin uploads cover images. Vercel's
-serverless filesystem cannot store uploaded files permanently:
+⚠️ **CRITICAL — Images will NOT appear in production without Cloudinary.**
+Vercel's serverless filesystem is ephemeral (deleted after each deploy). Any
+image uploaded from the Django admin will be lost immediately unless you add
+these three Cloudinary variables to your Vercel project's **Environment Variables**:
 
 ```text
-CLOUDINARY_CLOUD_NAME=<cloud-name>
-CLOUDINARY_API_KEY=<api-key>
-CLOUDINARY_API_SECRET=<api-secret>
+CLOUDINARY_CLOUD_NAME=drdnr9ltn
+CLOUDINARY_API_KEY=892365174583956
+CLOUDINARY_API_SECRET=LKSsVKYBrQtILlb1HPtnNG35Xfo
 ```
+
+After adding them, click **Redeploy** in the Vercel dashboard. You can find
+these values in your local `backend/.env` file. Add them at:
+**Vercel Dashboard → Project → Settings → Environment Variables**.
 
 Every environment-variable change requires a new deployment. The site falls back to `https://encounterchrist.online` for canonical metadata, but setting `NEXT_PUBLIC_SITE_URL` explicitly keeps the configuration clear and portable.
 
