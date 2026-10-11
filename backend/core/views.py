@@ -80,6 +80,11 @@ class PrayerIntentionViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(category=category)
         return queryset
 
+    def perform_create(self, serializer):
+        # Public intentions are immediately visible on the prayer wall and
+        # saved to the database used by the live API.
+        serializer.save(is_approved=True)
+
     @action(detail=True, methods=['post'])
     def pray(self, request, pk=None):
         """Endpoint to increment intercession count when someone taps 'I Prayed For You'"""

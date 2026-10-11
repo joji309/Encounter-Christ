@@ -23,6 +23,7 @@ export default function PrayerWall({ initialPrayers }: PrayerWallProps) {
   const [category, setCategory] = useState('FAITH_RETURN');
   const [intentionText, setIntentionText] = useState('');
   const [formSuccess, setFormSuccess] = useState(false);
+  const [submissionError, setSubmissionError] = useState('');
 
   const categories = [
     { id: 'ALL', label: 'All Intentions' },
@@ -57,6 +58,7 @@ export default function PrayerWall({ initialPrayers }: PrayerWallProps) {
     e.preventDefault();
     if (!intentionText.trim()) return;
 
+    setSubmissionError('');
     setIsSubmitting(true);
     const result = await submitPrayerIntention({
       name: name.trim() || 'A Fellow Pilgrim',
@@ -81,6 +83,8 @@ export default function PrayerWall({ initialPrayers }: PrayerWallProps) {
         setLocation('');
         setIntentionText('');
       }, 2000);
+    } else {
+      setSubmissionError(result.error || 'Unable to save your prayer intention. Please try again.');
     }
     setIsSubmitting(false);
   };
@@ -262,6 +266,9 @@ export default function PrayerWall({ initialPrayers }: PrayerWallProps) {
                     placeholder="Pour out your heart to Jesus..."
                     className="w-full bg-white border border-amber-200 rounded-xl px-4 py-2.5 text-xs text-stone-900 focus:outline-none focus:border-amber-500 shadow-inner"
                   />
+                  {submissionError && (
+                    <p className="mt-2 text-sm font-medium text-red-700" role="alert">{submissionError}</p>
+                  )}
                 </div>
 
                 <button

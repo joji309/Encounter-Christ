@@ -2,7 +2,9 @@ import { Miracle, PrayerIntention, DailyReflection, ApologeticsTopic, Event, Euc
 import { SITE_URL } from './site-url';
 
 // Browser requests stay same-origin; server rendering calls Django directly.
-const browserApiUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
+// Browser requests always use the active site domain. This prevents a stale
+// deployment URL from sending form posts to an old Vercel deployment.
+const browserApiUrl = '/api';
 const vercelOrigin = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
 const serverApiUrl = process.env.DJANGO_BACKEND_URL
   ? `${process.env.DJANGO_BACKEND_URL.replace(/\/$/, '')}/api`
@@ -93,30 +95,21 @@ export async function fetchPrayerIntentions(): Promise<PrayerIntention[]> {
   }
 }
 
-export async function submitPrayerIntention(payload: { name: string; location?: string; category: string; intention_text: string }): Promise<{ success: boolean; data?: PrayerIntention }> {
+export async function submitPrayerIntention(payload: { name: string; location?: string; category: string; intention_text: string }): Promise<{ success: boolean; data?: PrayerIntention; error?: string }> {
   try {
     const res = await fetch(`${getApiBaseUrl()}/prayers/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    if (!res.ok) throw new Error('Failed to submit intention');
+    if (!res.ok) throw new Error('Unable to save your prayer intention. Please try again.');
     const data = await res.json();
     return { success: true, data };
-  } catch {
-    // Client-side fallback
-    const mockNew: PrayerIntention = {
-      id: Date.now(),
-      name: payload.name || 'A Fellow Pilgrim',
-      location: payload.location || '',
-      category: payload.category,
-      category_display: payload.category,
-      intention_text: payload.intention_text,
-      is_candle_lit: true,
-      prayers_count: 1,
-      created_at: 'Just now'
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unable to save your prayer intention. Please try again.',
     };
-    return { success: true, data: mockNew };
   }
 }
 
