@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings, EucharisticPrayer
+from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings, EucharisticPrayer, MediaCategory, MediaCollection, MediaItem
 
 
 class MiracleAdminForm(forms.ModelForm):
@@ -211,3 +211,40 @@ class EucharisticPrayerAdmin(admin.ModelAdmin):
     search_fields = ['tab_title', 'title', 'content']
     list_filter = ['is_active']
     ordering = ['order', 'id']
+
+
+@admin.register(MediaCategory)
+class MediaCategoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'slug']
+    search_fields = ['name', 'description']
+    prepopulated_fields = {'slug': ('name',)}
+
+
+@admin.register(MediaCollection)
+class MediaCollectionAdmin(admin.ModelAdmin):
+    list_display = ['title', 'order', 'is_published', 'item_count']
+    list_editable = ['order', 'is_published']
+    search_fields = ['title', 'description']
+    prepopulated_fields = {'slug': ('title',)}
+
+    def item_count(self, obj):
+        return obj.items.count()
+    item_count.short_description = 'Resources'
+
+
+@admin.register(MediaItem)
+class MediaItemAdmin(admin.ModelAdmin):
+    list_display = ['title', 'content_type', 'creator', 'status', 'is_featured', 'is_new', 'order', 'published_at']
+    list_editable = ['status', 'is_featured', 'is_new', 'order']
+    list_filter = ['content_type', 'source_type', 'status', 'is_featured', 'is_new', 'language', 'categories']
+    search_fields = ['title', 'creator', 'short_description', 'description', 'attribution']
+    prepopulated_fields = {'slug': ('title',)}
+    filter_horizontal = ['categories', 'collections']
+    readonly_fields = ['published_at', 'created_at', 'updated_at']
+    fieldsets = (
+        ('Resource', {'fields': ('title', 'slug', 'content_type', 'short_description', 'description', 'creator', 'language', 'duration_seconds', 'publication_year', 'age_guidance', 'cover_image')}),
+        ('Access', {'description': 'Use official embeds/links unless you own or have permission to host the file.', 'fields': ('source_type', 'source_url', 'file')}),
+        ('Rights and attribution', {'description': 'Only publish resources with verified rights. Attribution is shown to visitors.', 'fields': ('license_name', 'attribution', 'rights_notes')}),
+        ('Discovery', {'fields': ('categories', 'collections', 'is_featured', 'is_new', 'order')}),
+        ('Publishing', {'fields': ('status', 'published_at', 'created_at', 'updated_at')}),
+    )

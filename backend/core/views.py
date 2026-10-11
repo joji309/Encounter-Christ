@@ -1,11 +1,11 @@
 from django.utils import timezone
-from django.db.models import F
+from django.db.models import F, Q
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings, EucharisticPrayer
+from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings, EucharisticPrayer, MediaCategory, MediaCollection, MediaItem
 from .serializers import (
     CategorySerializer,
     MiracleListSerializer,
@@ -16,6 +16,9 @@ from .serializers import (
     ApologeticsTopicSerializer,
     EventSerializer,
     EucharisticPrayerSerializer,
+    MediaCategorySerializer,
+    MediaCollectionSerializer,
+    MediaItemSerializer,
 )
 
 
@@ -155,6 +158,51 @@ class EucharisticPrayerViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return EucharisticPrayer.objects.filter(is_active=True).order_by('order', 'id')
+
+
+class MediaCategoryViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = MediaCategory.objects.filter(items__status=MediaItem.Status.PUBLISHED).distinct()
+    serializer_class = MediaCategorySerializer
+    lookup_field = 'slug'
+    pagination_class = None
+
+
+class MediaCollectionViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = MediaCollection.objects.filter(is_published=True)
+    serializer_class = MediaCollectionSerializer
+    lookup_field = 'slug'
+    pagination_class = None
+
+
+class MediaItemViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = MediaItemSerializer
+    lookup_field = 'slug'
+
+    def get_queryset(self):
+        queryset = MediaItem.objects.filter(status=MediaItem.Status.PUBLISHED).prefetch_related('categories', 'collections')
+        content_type = self.request.query_params.get('type')
+        category = self.request.query_params.get('category')
+        collection = self.request.query_params.get('collection')
+        search = self.request.query_params.get('search')
+        featured = self.request.query_params.get('featured')
+
+        if content_type:
+            queryset = queryset.filter(content_type=content_type.upper())
+        if category:
+            queryset = queryset.filter(categories__slug=category)
+        if collection:
+            queryset = queryset.filter(collections__slug=collection)
+        if featured and featured.lower() == 'true':
+            queryset = queryset.filter(is_featured=True)
+        if search:
+            queryset = queryset.filter(
+                Q(title__icontains=search) |
+                Q(creator__icontains=search) |
+                Q(short_description__icontains=search) |
+                Q(description__icontains=search) |
+                Q(categories__name__icontains=search)
+            )
+        return queryset.distinct()
 
 
 class OverviewStatsView(APIView):

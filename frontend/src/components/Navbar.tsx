@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Sparkles, Flame, Compass, BookOpen, HeartHandshake, Share2, Map } from 'lucide-react';
+import { Menu, X, Sparkles, Flame, Compass, BookOpen, HeartHandshake, Share2, Map, LibraryBig } from 'lucide-react';
 import AmbientAudioPlayer from './AmbientAudioPlayer';
 
 export default function Navbar() {
@@ -12,6 +12,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const navLinks = [
+    { name: 'Free Library', href: '/library', icon: LibraryBig },
     { name: 'Miracles', href: '/miracles', icon: Sparkles },
     { name: 'Interactive Map', href: '/map', icon: Map },
     { name: 'Forensic Science', href: '/science', icon: Compass },
