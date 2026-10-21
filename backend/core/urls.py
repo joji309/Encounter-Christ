@@ -11,9 +11,6 @@ from .views import (
     EventViewSet,
     OverviewStatsView,
     EucharisticPrayerViewSet,
-    MediaCategoryViewSet,
-    MediaCollectionViewSet,
-    MediaItemViewSet,
 )
 
 router = DefaultRouter()
@@ -25,9 +22,6 @@ router.register(r'reflections', DailyReflectionViewSet, basename='reflection')
 router.register(r'apologetics', ApologeticsTopicViewSet, basename='apologetic')
 router.register(r'events', EventViewSet, basename='event')
 router.register(r'eucharistic-prayers', EucharisticPrayerViewSet, basename='eucharistic-prayer')
-router.register(r'library/categories', MediaCategoryViewSet, basename='media-category')
-router.register(r'library/collections', MediaCollectionViewSet, basename='media-collection')
-router.register(r'library/items', MediaItemViewSet, basename='media-item')
 
 urlpatterns = [
     path('site-status/', SiteStatusView.as_view(), name='site-status'),

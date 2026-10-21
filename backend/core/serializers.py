@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings, EucharisticPrayer, MediaCategory, MediaCollection, MediaItem
+from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings, EucharisticPrayer
 
 class SiteSettingsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -108,54 +108,3 @@ class EucharisticPrayerSerializer(serializers.ModelSerializer):
     class Meta:
         model = EucharisticPrayer
         fields = ['id', 'tab_title', 'title', 'content', 'order', 'is_active', 'updated_at']
-
-
-class MediaCategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MediaCategory
-        fields = ['id', 'name', 'slug', 'description']
-
-
-class MediaCollectionSerializer(serializers.ModelSerializer):
-    cover_image_url = serializers.SerializerMethodField()
-
-    class Meta:
-        model = MediaCollection
-        fields = ['id', 'title', 'slug', 'description', 'cover_image_url', 'order']
-
-    def get_cover_image_url(self, obj):
-        if not obj.cover_image:
-            return ''
-        request = self.context.get('request')
-        return request.build_absolute_uri(obj.cover_image.url) if request else obj.cover_image.url
-
-
-class MediaItemSerializer(serializers.ModelSerializer):
-    cover_image_url = serializers.SerializerMethodField()
-    file_url = serializers.SerializerMethodField()
-    categories = MediaCategorySerializer(many=True, read_only=True)
-    collections = MediaCollectionSerializer(many=True, read_only=True)
-    content_type_display = serializers.CharField(source='get_content_type_display', read_only=True)
-
-    class Meta:
-        model = MediaItem
-        fields = [
-            'id', 'title', 'slug', 'content_type', 'content_type_display',
-            'short_description', 'description', 'creator', 'language',
-            'duration_seconds', 'publication_year', 'age_guidance',
-            'cover_image_url', 'source_type', 'source_url', 'file_url',
-            'license_name', 'attribution', 'categories', 'collections',
-            'is_featured', 'is_new', 'published_at', 'updated_at',
-        ]
-
-    def _absolute_file_url(self, field):
-        if not field:
-            return ''
-        request = self.context.get('request')
-        return request.build_absolute_uri(field.url) if request else field.url
-
-    def get_cover_image_url(self, obj):
-        return self._absolute_file_url(obj.cover_image)
-
-    def get_file_url(self, obj):
-        return self._absolute_file_url(obj.file)
