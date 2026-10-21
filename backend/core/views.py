@@ -2,6 +2,7 @@ from django.utils import timezone
 from django.db.models import F
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -69,6 +70,11 @@ class MiracleViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class PrayerIntentionViewSet(viewsets.ModelViewSet):
+    # Prayer-wall interactions are deliberately public. Disabling session
+    # authentication here prevents an unrelated Django admin session cookie
+    # from triggering DRF's CSRF enforcement and rejecting a visitor's prayer.
+    authentication_classes = []
+    permission_classes = [AllowAny]
     queryset = PrayerIntention.objects.filter(is_approved=True)
     serializer_class = PrayerIntentionSerializer
     http_method_names = ['get', 'post', 'head', 'options']
