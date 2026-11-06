@@ -111,8 +111,6 @@ export default function Footer() {
             <Link href="/apologetics" className="hover:text-amber-800 transition-colors">Catholic Answers</Link>
             <span>•</span>
             <Link href="/share" className="hover:text-amber-800 transition-colors">Share Jesus</Link>
-            <span>•</span>
-            <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="noopener noreferrer" className="hover:text-amber-800 transition-colors">Django Admin</a>
           </div>
         </div>
       </div>
