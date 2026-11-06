@@ -1,4 +1,4 @@
-import { Miracle, PrayerIntention, DailyReflection, ApologeticsTopic, Event, EucharisticPrayer, INITIAL_MIRACLES, INITIAL_PRAYERS, INITIAL_DAILY_REFLECTION, INITIAL_EUCHARISTIC_PRAYERS } from '@/data/miraclesData';
+import { Miracle, PrayerIntention, DailyReflection, ApologeticsTopic, Event, EucharisticPrayer, EucharisticSaint, INITIAL_MIRACLES, INITIAL_PRAYERS, INITIAL_DAILY_REFLECTION, INITIAL_EUCHARISTIC_PRAYERS } from '@/data/miraclesData';
 import { SITE_URL } from './site-url';
 
 // Browser requests stay same-origin; server rendering calls Django directly.
@@ -156,6 +156,17 @@ export async function fetchEucharisticPrayers(): Promise<EucharisticPrayer[]> {
     return list.length > 0 ? list : INITIAL_EUCHARISTIC_PRAYERS;
   } catch {
     return INITIAL_EUCHARISTIC_PRAYERS;
+  }
+}
+
+export async function fetchEucharisticSaints(): Promise<EucharisticSaint[]> {
+  try {
+    const res = await fetch(`${getApiBaseUrl()}/saints/`, { cache: 'no-store' });
+    if (!res.ok) throw new Error('Saints fetch failed');
+    const data = await res.json();
+    return Array.isArray(data) ? data : data.results || [];
+  } catch {
+    return [];
   }
 }
 

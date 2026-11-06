@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings, EucharisticPrayer
+from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings, EucharisticPrayer, EucharisticSaint
 
 class SiteSettingsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -108,3 +108,20 @@ class EucharisticPrayerSerializer(serializers.ModelSerializer):
     class Meta:
         model = EucharisticPrayer
         fields = ['id', 'tab_title', 'title', 'content', 'order', 'is_active', 'updated_at']
+
+
+class EucharisticSaintSerializer(serializers.ModelSerializer):
+    portrait_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = EucharisticSaint
+        fields = [
+            'id', 'name', 'slug', 'portrait_url', 'date_of_birth', 'date_of_death',
+            'short_bio', 'eucharistic_witness', 'quote', 'feast_day', 'order', 'updated_at',
+        ]
+
+    def get_portrait_url(self, obj):
+        if not obj.portrait:
+            return ''
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.portrait.url) if request else obj.portrait.url

@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase, override_settings
 
-from .models import Miracle, PrayerIntention
+from .models import EucharisticSaint, Miracle, PrayerIntention
 
 
 @override_settings(ALLOWED_HOSTS=['testserver'])
@@ -64,3 +64,28 @@ class PrayerIntentionApiTests(TestCase):
         }, content_type='application/json')
 
         self.assertEqual(response.status_code, 201)
+
+
+class EucharisticSaintApiTests(TestCase):
+    def test_public_api_returns_only_published_saints_in_display_order(self):
+        later = EucharisticSaint.objects.create(
+            name='St. Later', date_of_birth='1200', date_of_death='1250',
+            short_bio='A later listed saint.', eucharistic_witness='Loved the Eucharist.',
+            is_published=True, order=2,
+        )
+        first = EucharisticSaint.objects.create(
+            name='St. First', date_of_birth='1100', date_of_death='1150',
+            short_bio='A first listed saint.', eucharistic_witness='Adored Christ in the Eucharist.',
+            is_published=True, order=1,
+        )
+        EucharisticSaint.objects.create(
+            name='Draft Saint', short_bio='Not public.', eucharistic_witness='Not public.',
+            is_published=False,
+        )
+
+        response = self.client.get('/api/saints/')
+
+        self.assertEqual(response.status_code, 200)
+        saints = response.json()
+        self.assertEqual([saint['id'] for saint in saints], [first.id, later.id])
+        self.assertEqual(saints[0]['name'], 'St. First')

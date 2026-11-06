@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings, EucharisticPrayer
+from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings, EucharisticPrayer, EucharisticSaint
 
 
 class MiracleAdminForm(forms.ModelForm):
@@ -211,3 +211,24 @@ class EucharisticPrayerAdmin(admin.ModelAdmin):
     search_fields = ['tab_title', 'title', 'content']
     list_filter = ['is_active']
     ordering = ['order', 'id']
+
+
+@admin.register(EucharisticSaint)
+class EucharisticSaintAdmin(admin.ModelAdmin):
+    list_display = ['name', 'date_of_birth', 'date_of_death', 'feast_day', 'is_published', 'order', 'portrait_preview']
+    list_editable = ['is_published', 'order']
+    list_filter = ['is_published']
+    search_fields = ['name', 'short_bio', 'eucharistic_witness', 'quote']
+    prepopulated_fields = {'slug': ('name',)}
+    readonly_fields = ['portrait_preview', 'created_at', 'updated_at']
+    fieldsets = (
+        ('Saint', {'fields': ('name', 'slug', 'portrait', 'portrait_preview', 'date_of_birth', 'date_of_death', 'feast_day')}),
+        ('Public card content', {'fields': ('short_bio', 'eucharistic_witness', 'quote')}),
+        ('Publishing', {'fields': ('is_published', 'order', 'created_at', 'updated_at')}),
+    )
+
+    def portrait_preview(self, obj):
+        if obj and obj.portrait:
+            return format_html('<img src="{}" width="100" height="100" style="object-fit:cover; border-radius:8px;" alt="" />', obj.portrait.url)
+        return '-'
+    portrait_preview.short_description = 'Portrait preview'

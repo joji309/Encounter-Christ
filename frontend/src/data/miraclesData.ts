@@ -83,6 +83,21 @@ export interface EucharisticPrayer {
   is_active?: boolean;
 }
 
+export interface EucharisticSaint {
+  id: number;
+  name: string;
+  slug: string;
+  portrait_url: string;
+  date_of_birth: string;
+  date_of_death: string;
+  short_bio: string;
+  eucharistic_witness: string;
+  quote: string;
+  feast_day: string;
+  order: number;
+  updated_at: string;
+}
+
 export const INITIAL_MIRACLES: Miracle[] = [
   {
     id: 1,

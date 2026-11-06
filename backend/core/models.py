@@ -251,3 +251,47 @@ class EucharisticPrayer(models.Model):
     def __str__(self):
         return f"{self.tab_title} ({self.title})"
 
+
+class EucharisticSaint(models.Model):
+    """A saint whose Eucharistic witness is presented on the public Saints page."""
+
+    name = models.CharField(max_length=200, help_text='For example: St. Thomas Aquinas')
+    slug = models.SlugField(unique=True, blank=True, max_length=220)
+    portrait = models.ImageField(
+        upload_to='saints/',
+        null=True,
+        blank=True,
+        help_text='Upload a portrait or sacred artwork. Stored in Cloudinary when configured.',
+    )
+    date_of_birth = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text='Use the historically appropriate form, e.g. “c. 1225” or “25 March 1347”.',
+    )
+    date_of_death = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text='Use the historically appropriate form, e.g. “7 March 1274”.',
+    )
+    short_bio = models.TextField(help_text='A concise introduction shown on the saint card.')
+    eucharistic_witness = models.TextField(help_text='Explain this saint’s love, teaching, or witness of the Holy Eucharist.')
+    quote = models.TextField(blank=True, help_text='Optional short quote. Verify attribution before publishing.')
+    feast_day = models.CharField(max_length=100, blank=True, help_text='Optional, e.g. “28 January”.')
+    order = models.PositiveIntegerField(default=0, help_text='Lower numbers appear first.')
+    is_published = models.BooleanField(default=False, help_text='Only published saints appear on the public page.')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Eucharistic saint'
+        verbose_name_plural = 'Eucharistic saints'
+        ordering = ['order', 'name']
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+

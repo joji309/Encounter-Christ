@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings, EucharisticPrayer
+from .models import Category, Miracle, PrayerIntention, Testimony, DailyReflection, ApologeticsTopic, Event, SiteSettings, EucharisticPrayer, EucharisticSaint
 from .serializers import (
     CategorySerializer,
     MiracleListSerializer,
@@ -17,6 +17,7 @@ from .serializers import (
     ApologeticsTopicSerializer,
     EventSerializer,
     EucharisticPrayerSerializer,
+    EucharisticSaintSerializer,
 )
 
 
@@ -161,6 +162,15 @@ class EucharisticPrayerViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return EucharisticPrayer.objects.filter(is_active=True).order_by('order', 'id')
+
+
+class EucharisticSaintViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = EucharisticSaintSerializer
+    lookup_field = 'slug'
+    pagination_class = None
+
+    def get_queryset(self):
+        return EucharisticSaint.objects.filter(is_published=True).order_by('order', 'name')
 
 
 class OverviewStatsView(APIView):
