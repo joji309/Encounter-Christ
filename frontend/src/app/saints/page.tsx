@@ -27,8 +27,8 @@ export default async function SaintsPage() {
       </header>
 
       {saints.length === 0 ? <section className="mx-auto max-w-xl rounded-3xl border border-dashed border-amber-300 bg-white/80 px-6 py-14 text-center shadow-sm"><Heart className="mx-auto h-11 w-11 text-amber-500" /><h2 className="mt-4 font-serif text-2xl font-bold text-stone-900">The saints will appear here soon</h2><p className="mt-3 text-sm leading-relaxed text-stone-600">This page is curated through the Encounter Christ admin panel. Check back as more Eucharistic witnesses are added.</p></section> : <section className="grid grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3">{saints.map((saint) => <article key={saint.id} className="group flex flex-col overflow-hidden rounded-3xl border border-amber-300/80 bg-white/95 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-        <div className="relative h-64 overflow-hidden bg-gradient-to-br from-amber-100 via-stone-100 to-amber-50">
-          {saint.portrait_url ? <img src={saint.portrait_url} alt={`Portrait of ${saint.name}`} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" /> : <Cross className="absolute inset-0 m-auto h-16 w-16 text-amber-600/70" />}
+        <div className="relative flex h-64 items-center justify-center overflow-hidden bg-gradient-to-br from-amber-100 via-stone-100 to-amber-50 p-3">
+          {saint.portrait_url ? <img src={saint.portrait_url} alt={`Portrait of ${saint.name}`} className="h-full w-full rounded-2xl object-contain transition-transform duration-700 group-hover:scale-[1.02]" /> : <Cross className="absolute inset-0 m-auto h-16 w-16 text-amber-600/70" />}
           <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-stone-950/80 to-transparent" />
           {saint.feast_day ? <div className="absolute bottom-4 left-4 rounded-full border border-amber-200 bg-white/95 px-3 py-1 text-[11px] font-bold text-amber-900 shadow-sm">Feast: {saint.feast_day}</div> : null}
         </div>
