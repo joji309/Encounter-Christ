@@ -3,13 +3,14 @@
 Deploy the repository as one Vercel project from the repository root. Next.js
 serves the public site and the root `api/index.py` function serves Django on the
 same domain. Vercel's serverless filesystem is ephemeral, so production Django
-must use hosted PostgreSQL rather than the local SQLite file.
+must use hosted PostgreSQL rather than the local SQLite file. The deployment
+build applies committed Django migrations automatically.
 
 ## 1. Create the database
 
 Create a PostgreSQL database with Neon, Vercel Postgres, Supabase, or another
 provider. Keep its connection string ready as `DATABASE_URL`. Run migrations
-locally against it from the `backend` directory:
+locally against it from the `backend` directory for the initial setup:
 
 ```powershell
 python manage.py migrate
